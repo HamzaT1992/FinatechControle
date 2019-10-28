@@ -56,11 +56,14 @@
       <HintPath>..\lib\RCWF\2018.1.116.40\Telerik.WinControls.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Telerik.WinControls.GridView, Version=2013.1.220.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
     <Reference Include="Telerik.WinControls.PdfViewer, Version=2018.1.116.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
       <HintPath>..\lib\RCWF\2018.1.116.40\Telerik.WinControls.PdfViewer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Telerik.WinControls.RadDock, Version=2013.1.220.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.WinControls.Themes.Breeze, Version=2013.1.220.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
+    <Reference Include="Telerik.WinControls.Themes.TelerikMetroBlue, Version=2013.1.220.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
     <Reference Include="Telerik.WinControls.UI, Version=2018.1.116.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
       <HintPath>..\lib\RCWF\2018.1.116.40\Telerik.WinControls.UI.dll</HintPath>
       <Private>True</Private>
@@ -91,6 +94,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Banque.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Banque.Designer.cs">
+      <DependentUpon>Banque.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Client.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Client.Designer.cs">
+      <DependentUpon>Client.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fournisseur.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Fournisseur.Designer.cs">
+      <DependentUpon>Fournisseur.cs</DependentUpon>
+    </Compile>
     <Compile Include="RadForm1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,6 +124,15 @@
     <Compile Include="ShapedForm1.Designer.cs">
       <DependentUpon>ShapedForm1.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Banque.resx">
+      <DependentUpon>Banque.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Client.resx">
+      <DependentUpon>Client.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fournisseur.resx">
+      <DependentUpon>Fournisseur.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="RadForm1.resx">
       <DependentUpon>RadForm1.cs</DependentUpon>
@@ -137,6 +167,13 @@
   </ItemGroup>
   <ItemGroup>
     <!--sirinie -->
+    <Content Include="Resources\blueFolder.png" />
+    <Content Include="Resources\boite.png" />
+    <Content Include="Resources\cardfilebox.png" />
+    <Content Include="Resources\document.png" />
+    <Content Include="Resources\openfilefolder.png" />
+    <Content Include="Resources\redFolder.png" />
+    <Content Include="Resources\vioFolder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

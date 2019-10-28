@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FinatechControle.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -17,6 +18,7 @@ namespace FinatechControle
 {
     public partial class RadForm1 : Telerik.WinControls.UI.RadForm
     {
+        // id utilisateur de controle
         string id_user_control;
         public RadForm1(string id_user)
         {
@@ -25,6 +27,8 @@ namespace FinatechControle
             //var Boites = new RadTreeNode();
             //Boites.Text = "Boites";
             radTreeView2.SelectedNodeChanged += Node_Changed;
+            //fournisseur1.radTreeView = radTreeView2;
+            //splitPanel3
         }
 
         private void RadForm1_Load(object sender, EventArgs e)
@@ -33,7 +37,7 @@ namespace FinatechControle
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
-                string rqtNumBoites = "select distinct Numboite from DossiersIndexes where  id_status=3 and type='Achat/FOURNISSEUR'";
+                string rqtNumBoites = "select distinct Numboite from DossiersIndexes where id_status=3";
 
 
                 SqlDataAdapter da = new SqlDataAdapter(rqtNumBoites, cnn);
@@ -55,10 +59,26 @@ namespace FinatechControle
                         var path = item["CheminPDF"].ToString();
                         doc.Text = doss;
                         doc.Value = path;
+                        doc.Tag = item["type"].ToString();
+                        doc.Image = Resources.openfilefolder;
+                        //switch (item["type"].ToString())
+                        //{
+                        //    case "Achat/FOURNISSEUR":
+                        //        doc.Image = Resources.redFolder;
+                        //        break;
+                        //    case "Vente/Client":
+                        //        doc.Image = Resources.blueFolder;
+                        //        break;
+                        //    default:
+                        //        doc.Image = Resources.vioFolder;
+                        //        break;
+                        //}
+                        
                         boite.Nodes.Add(doc);
                     }
                     //Boites.Nodes.Add(boite);
                     boite.Text = $"Boite {numBoite} ({Docs.Rows.Count})";
+                    boite.Image = Resources.cardfilebox;
                     radTreeView2.Nodes.Add(boite);
                 }
 
@@ -71,14 +91,12 @@ namespace FinatechControle
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
-                string reqdocs = "select * from DossiersIndexes where id_status=3 and type='Achat/FOURNISSEUR' and Numboite = " + numboite;
-
+                string reqdocs = "select * from DossiersIndexes where id_status=3 and Numboite = " + numboite;
 
                 SqlDataAdapter da = new SqlDataAdapter(reqdocs, cnn);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
-                return dt;
-                
+                return dt;           
             }
         }
 
@@ -86,76 +104,109 @@ namespace FinatechControle
         {
             if (e.Node.Level == 1)
             {
-                radPdfViewer2.LoadDocument(e.Node.Value.ToString());
-                var row = getIndexs(e.Node.Text).Rows[0];
-                TBFournisseur.Text = row["Fournisseur"].ToString();
-                TBDateFacture.Text = row["DateFacture"].ToString();
-                TBReference.Text = row["Reference"].ToString();
-                TBNumProjet.Text = row["NumProjet"].ToString();
-                TBNumBonCom.Text = row["NumBonCommande"].ToString();
-                TBbu.Text = row["BU"].ToString();
-                TBNumBoite.Text = row["NumBoite"].ToString();
+                try
+                {
+                    radPdfViewer2.LoadDocument(e.Node.Value.ToString());
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                // Verifier le type de Document
+                var type = e.Node.Tag.ToString();
+                // Pour le type Achat/FOURNISSEUR
+                if (type == "Achat/FOURNISSEUR")
+                {
+                    var row = getIndexs(e.Node.Text, "Achat").Rows[0];
+                    var frniss = new Fournisseur()
+                    {
+                        radTreeView = radTreeView2,
+                        id_user_control = id_user_control,
+                        Fourniss = row["Fournisseur"].ToString(),
+                        DateFacture = row["DateFacture"].ToString(),
+                        Reference = row["Reference"].ToString(),
+                        NumProjet = row["NumProjet"].ToString(),
+                        NumBonCommande = row["NumBonCommande"].ToString(),
+                        BU = row["BU"].ToString(),
+                        NumBoite = row["NumBoite"].ToString()
+                    };
+                    foreach (Control item in splitPanel3.Controls)
+                    {
+                        item.Dispose();
+                    }
+                    splitPanel3.Controls.Add(frniss);
+                    frniss.BringToFront();
+                    frniss.Dock = DockStyle.Fill;
+                }
+                // Pour le type Vente/Client
+                else if (type == "Vente/Client")
+                {
+                    var row = getIndexs(e.Node.Text, "Vente").Rows[0];
+                    var client = new Client()
+                    {
+                        radTreeView = radTreeView2,
+                        id_user_control = id_user_control,
+                        Cl = row["Client"].ToString(),
+                        DateFacture = row["DateFacture"].ToString(),
+                        Numfacture = row["Numfacture"].ToString(),
+                        NumProjet = row["NumProjet"].ToString(),
+                        BU = row["BU"].ToString(),
+                        NumBoite = row["Numboite"].ToString()
+                    };
+                    foreach (Control item in splitPanel3.Controls)
+                    {
+                        item.Dispose();
+                    }
+                    splitPanel3.Controls.Add(client);
+                    client.BringToFront();
+                    client.Dock = DockStyle.Fill;
+                }
+                // Pour le type BANQUES
+                else if (type == "BANQUES")
+                {
+                    var row = getIndexs(e.Node.Text, "banque").Rows[0];
+                    var banque = new Banque()
+                    {
+                        radTreeView = radTreeView2,
+                        id_user_control = id_user_control,
+                        NumOP = row["NumOP"].ToString(),
+                        NumSerieCheque = row["NumSerieCheque"].ToString(),
+                        Date = row["Date"].ToString(),
+                        Beneficiaire = row["Beneficiaire"].ToString(),
+                        Reference = row["Reference"].ToString(),
+                        Montant = row["Montant"].ToString(),
+                        NumBoite = row["NumBoite"].ToString()
+                    };
+                    foreach (Control item in splitPanel3.Controls)
+                    {
+                        item.Dispose();
+                    }
+                    splitPanel3.Controls.Add(banque);
+                    banque.BringToFront();
+                    banque.Dock = DockStyle.Fill;
+                }
             }
-        }
+        }    
 
-        private DataTable getIndexs(string nomDoss)
+        private DataTable getIndexs(string nomDoss, string table)
         {
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
-                string reqdocs = "select * from Achat where NomDossier = '" + nomDoss+"'";
+                string reqdocs = $"select * from {table} where NomDossier = '{nomDoss}'";
 
 
                 SqlDataAdapter da = new SqlDataAdapter(reqdocs, cnn);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
                 return dt;
-
             }
         }
 
         private void radLabel1_Click(object sender, EventArgs e)
         {
 
-        }
-
-        private void validChanges_Click(object sender, EventArgs e)
-        {
-            var nomDoc = radTreeView2.SelectedNode.Text;
-            var Fournisseur = TBFournisseur.Text;
-            var Date = TBDateFacture.Text;
-            var Reference = TBReference.Text;
-            var NumProjet = TBNumProjet.Text;
-            var NumBonCom = TBNumBonCom.Text;
-            var BU = TBbu.Text;
-            var NumBoite = TBNumBoite.Text;
-
-            var req = $"update Achat set [Fournisseur]='{Fournisseur}' ,[DateFacture]='{Date}' ,[Reference]='{Reference}' ,[NumProjet]={NumProjet} ,[NumBonCommande]={NumBonCom} ,[BU]='{BU}' ,[NumBoite]={NumBoite},id_status=6,id_user_control='{id_user_control}' where [NomDossier]='{nomDoc}' " +
-                $"UPDATE FinaTech_Test.dbo.DossiersIndexes SET id_status=6 where NomDossier='{nomDoc}'";
-            var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
-            using (SqlConnection cnn = new SqlConnection(constr))
-            {
-                cnn.Open();
-                var cmd = new SqlCommand(req, cnn);
-                cmd.ExecuteNonQuery();
-                //MessageBox.Show("Opération effectué!!");
-            }
-            var docControle = radTreeView2.SelectedNode;
-            var parent = docControle.Parent;
-            if (radTreeView2.SelectedNode.NextNode != null)
-            {
-                radTreeView2.SelectedNode = docControle.NextNode;
-            }
-            else
-            {                
-                radTreeView2.SelectedNode = parent;
-            }
-            parent.Nodes.Remove(docControle);
-            if (radTreeView2.SelectedNode == parent)
-            {
-                radTreeView2.Nodes.Remove(parent);
-            }
         }
 
         private void RadForm1_FormClosed(object sender, FormClosedEventArgs e)
