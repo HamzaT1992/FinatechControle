@@ -10,9 +10,9 @@ using System.Data.SqlClient;
 
 namespace FinatechControle
 {
-    public partial class ShapedForm1 : Telerik.WinControls.UI.ShapedForm
+    public partial class Login : Telerik.WinControls.UI.ShapedForm
     {
-        public ShapedForm1()
+        public Login()
         {
             InitializeComponent();
             loginTBox.Select();
@@ -27,7 +27,7 @@ namespace FinatechControle
         {
             var constr = ConfigurationManager.ConnectionStrings["StrConCX"].ConnectionString;
             var login = loginTBox.Text;
-            var pass = loginTBox.Text;
+            var pass = passTBox.Text;
             if (login == "" || pass == "")
             {
                 return;
@@ -46,13 +46,13 @@ namespace FinatechControle
                 var row = dt.Rows[0];
                 var id_user = row["id_user"].ToString();
                 var id_equipe = row["id_equipe"].ToString();
-                //if (id_equipe != "7")
-                //{
-                //    MessageBox.Show("Vous n'êtes pas en équipe Finatech!!");
-                //    return;
-                //}
+                if (id_equipe != "7")
+                {
+                    MessageBox.Show("Vous n'êtes pas en équipe Finatech!!");
+                    return;
+                }
                 Hide();
-                new RadForm1(id_user).Show();
+                new Controle(id_user).Show();
             }
         }
 

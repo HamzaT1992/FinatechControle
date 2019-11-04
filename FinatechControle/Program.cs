@@ -14,7 +14,7 @@ namespace FinatechControle
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ShapedForm1());
+            Application.Run(new Login());
         }
     }
 }

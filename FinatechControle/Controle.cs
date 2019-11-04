@@ -16,11 +16,11 @@ using Telerik.WinControls.UI.Docking;
 
 namespace FinatechControle
 {
-    public partial class RadForm1 : Telerik.WinControls.UI.RadForm
+    public partial class Controle : Telerik.WinControls.UI.RadForm
     {
         // id utilisateur de controle
         string id_user_control;
-        public RadForm1(string id_user)
+        public Controle(string id_user)
         {
             InitializeComponent();
             id_user_control = id_user;
@@ -33,6 +33,7 @@ namespace FinatechControle
 
         private void RadForm1_Load(object sender, EventArgs e)
         {
+            // Chareger les boites et les dossiers
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
             using (SqlConnection cnn = new SqlConnection(constr))
             {
@@ -84,7 +85,7 @@ namespace FinatechControle
 
             }
         }
-
+        // Obtenir tous les documents d'une boite
         private DataTable getDocs(string numboite)
         {
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
@@ -99,7 +100,7 @@ namespace FinatechControle
                 return dt;           
             }
         }
-
+        // selectioner un dossier
         private void Node_Changed(object sender, RadTreeViewEventArgs e)
         {
             if (e.Node.Level == 1)
@@ -187,7 +188,7 @@ namespace FinatechControle
                 }
             }
         }    
-
+        // obtenir les indexes d'un document
         private DataTable getIndexs(string nomDoss, string table)
         {
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;

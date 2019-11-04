@@ -1,6 +1,6 @@
 ﻿namespace FinatechControle
 {
-    partial class RadForm1
+    partial class Controle
     {
         /// <summary>
         /// Required designer variable.
@@ -28,18 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.radTreeView2 = new Telerik.WinControls.UI.RadTreeView();
-            this.radPdfViewer2 = new Telerik.WinControls.UI.RadPdfViewer();
             this.BULabel = new Telerik.WinControls.UI.RadLabel();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.radPdfViewerNavigator1 = new Telerik.WinControls.UI.RadPdfViewerNavigator();
             this.radSplitContainer1 = new Telerik.WinControls.UI.RadSplitContainer();
             this.splitPanel1 = new Telerik.WinControls.UI.SplitPanel();
             this.splitPanel2 = new Telerik.WinControls.UI.SplitPanel();
             this.splitPanel3 = new Telerik.WinControls.UI.SplitPanel();
+            this.radPdfViewer2 = new Telerik.WinControls.UI.RadPdfViewer();
             ((System.ComponentModel.ISupportInitialize)(this.radTreeView2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radPdfViewer2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BULabel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPdfViewerNavigator1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSplitContainer1)).BeginInit();
@@ -49,6 +46,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitPanel2)).BeginInit();
             this.splitPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitPanel3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radPdfViewer2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -62,16 +60,6 @@
             this.radTreeView2.SpacingBetweenNodes = -1;
             this.radTreeView2.TabIndex = 0;
             // 
-            // radPdfViewer2
-            // 
-            this.radPdfViewer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radPdfViewer2.FitToWidth = true;
-            this.radPdfViewer2.Location = new System.Drawing.Point(0, 0);
-            this.radPdfViewer2.Name = "radPdfViewer2";
-            this.radPdfViewer2.Size = new System.Drawing.Size(792, 637);
-            this.radPdfViewer2.TabIndex = 1;
-            this.radPdfViewer2.ThumbnailsScaleFactor = 0.15F;
-            // 
             // BULabel
             // 
             this.BULabel.Location = new System.Drawing.Point(900, 364);
@@ -80,14 +68,8 @@
             this.BULabel.TabIndex = 8;
             this.BULabel.Text = "BU";
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            // 
             // radPdfViewerNavigator1
             // 
-            this.radPdfViewerNavigator1.AssociatedViewer = this.radPdfViewer2;
             this.radPdfViewerNavigator1.Dock = System.Windows.Forms.DockStyle.Top;
             this.radPdfViewerNavigator1.Location = new System.Drawing.Point(0, 0);
             this.radPdfViewerNavigator1.Name = "radPdfViewerNavigator1";
@@ -156,7 +138,16 @@
             this.splitPanel3.TabIndex = 2;
             this.splitPanel3.TabStop = false;
             // 
-            // RadForm1
+            // radPdfViewer2
+            // 
+            this.radPdfViewer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.radPdfViewer2.Location = new System.Drawing.Point(0, 0);
+            this.radPdfViewer2.Name = "radPdfViewer2";
+            this.radPdfViewer2.Size = new System.Drawing.Size(792, 637);
+            this.radPdfViewer2.TabIndex = 0;
+            this.radPdfViewer2.ThumbnailsScaleFactor = 0.15F;
+            // 
+            // Controle
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -164,7 +155,7 @@
             this.Controls.Add(this.radSplitContainer1);
             this.Controls.Add(this.radPdfViewerNavigator1);
             this.Controls.Add(this.BULabel);
-            this.Name = "RadForm1";
+            this.Name = "Controle";
             // 
             // 
             // 
@@ -174,7 +165,6 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.RadForm1_FormClosed);
             this.Load += new System.EventHandler(this.RadForm1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.radTreeView2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radPdfViewer2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.BULabel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPdfViewerNavigator1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSplitContainer1)).EndInit();
@@ -184,6 +174,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitPanel2)).EndInit();
             this.splitPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitPanel3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radPdfViewer2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -194,13 +185,12 @@
         private Telerik.WinControls.UI.RadTreeView radTreeView1;
         private Telerik.WinControls.UI.RadPdfViewer radPdfViewer1;
         private Telerik.WinControls.UI.RadTreeView radTreeView2;
-        private Telerik.WinControls.UI.RadPdfViewer radPdfViewer2;
         private Telerik.WinControls.UI.RadLabel BULabel;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private Telerik.WinControls.UI.RadPdfViewerNavigator radPdfViewerNavigator1;
         private Telerik.WinControls.UI.RadSplitContainer radSplitContainer1;
         private Telerik.WinControls.UI.SplitPanel splitPanel1;
         private Telerik.WinControls.UI.SplitPanel splitPanel2;
         private Telerik.WinControls.UI.SplitPanel splitPanel3;
+        private Telerik.WinControls.UI.RadPdfViewer radPdfViewer2;
     }
 }
