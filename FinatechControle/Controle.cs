@@ -92,7 +92,8 @@ namespace FinatechControle
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
-                string reqdocs = "select * from DossiersIndexes where id_status=3 and Numboite = " + numboite;
+                var boite = numboite == "" ? "Numboite is null" : "Numboite = '" + numboite + "'";
+                string reqdocs = "select * from DossiersIndexes where id_status=3 and " + boite;
 
                 SqlDataAdapter da = new SqlDataAdapter(reqdocs, cnn);
                 DataTable dt = new DataTable();
