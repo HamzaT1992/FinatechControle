@@ -39,7 +39,7 @@ namespace FinatechControle
 
         private void validChanges_Click(object sender, EventArgs e)
         {
-            var nomDoc = radTreeView.SelectedNode.Text;
+            var nomDoc = radTreeView.SelectedNode.Text.Replace("'", "''"); ;
             var Client = TBClient.Text;
             var DateFacture = TBDateFacture.Text;
             var Numfacture = TBNFacture.Text;
@@ -54,7 +54,7 @@ namespace FinatechControle
             }
 
             // update vente set [Client]= ,[DateFacture]= ,[Numfacture]= ,[NumProjet]= ,[BU]= ,[Numboite]= where [NomDossier]=
-            var req = $"UPDATE vente SET [Client]='{Client}' ,[DateFacture]='{DateFacture}' ,[Numfacture]='{Numfacture}' ,[NumProjet]={NumProjet} ,[BU]='{BU}' ,[NumBoite]={NumBoite},id_status=6,id_user_control='{id_user_control}' WHERE [NomDossier]='{nomDoc}' " +
+            var req = $"UPDATE vente SET [Client]='{Client}' ,[DateFacture]='{DateFacture}' ,[Numfacture]='{Numfacture}' ,[NumProjet]='{NumProjet}' ,[BU]='{BU}' ,[NumBoite]='{NumBoite}',id_status=6,id_user_control='{id_user_control}' WHERE [NomDossier]='{nomDoc}' " +
                 $"UPDATE FinaTech_Test.dbo.DossiersIndexes SET id_status=6 WHERE NomDossier='{nomDoc}'";
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
             using (SqlConnection cnn = new SqlConnection(constr))

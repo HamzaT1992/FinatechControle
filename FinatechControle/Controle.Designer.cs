@@ -34,8 +34,9 @@
             this.radSplitContainer1 = new Telerik.WinControls.UI.RadSplitContainer();
             this.splitPanel1 = new Telerik.WinControls.UI.SplitPanel();
             this.splitPanel2 = new Telerik.WinControls.UI.SplitPanel();
-            this.splitPanel3 = new Telerik.WinControls.UI.SplitPanel();
             this.radPdfViewer2 = new Telerik.WinControls.UI.RadPdfViewer();
+            this.splitPanel3 = new Telerik.WinControls.UI.SplitPanel();
+            this.materialTheme1 = new Telerik.WinControls.Themes.MaterialTheme();
             ((System.ComponentModel.ISupportInitialize)(this.radTreeView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BULabel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPdfViewerNavigator1)).BeginInit();
@@ -45,8 +46,8 @@
             this.splitPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitPanel2)).BeginInit();
             this.splitPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitPanel3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPdfViewer2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitPanel3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,9 +57,10 @@
             this.radTreeView2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radTreeView2.Location = new System.Drawing.Point(0, 0);
             this.radTreeView2.Name = "radTreeView2";
-            this.radTreeView2.Size = new System.Drawing.Size(233, 637);
+            this.radTreeView2.Size = new System.Drawing.Size(233, 634);
             this.radTreeView2.SpacingBetweenNodes = -1;
             this.radTreeView2.TabIndex = 0;
+            this.radTreeView2.ThemeName = "ControlDefault";
             // 
             // BULabel
             // 
@@ -73,8 +75,9 @@
             this.radPdfViewerNavigator1.Dock = System.Windows.Forms.DockStyle.Top;
             this.radPdfViewerNavigator1.Location = new System.Drawing.Point(0, 0);
             this.radPdfViewerNavigator1.Name = "radPdfViewerNavigator1";
-            this.radPdfViewerNavigator1.Size = new System.Drawing.Size(1292, 38);
+            this.radPdfViewerNavigator1.Size = new System.Drawing.Size(1290, 39);
             this.radPdfViewerNavigator1.TabIndex = 17;
+            this.radPdfViewerNavigator1.ThemeName = "ControlDefault";
             // 
             // radSplitContainer1
             // 
@@ -82,13 +85,13 @@
             this.radSplitContainer1.Controls.Add(this.splitPanel2);
             this.radSplitContainer1.Controls.Add(this.splitPanel3);
             this.radSplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radSplitContainer1.Location = new System.Drawing.Point(0, 38);
+            this.radSplitContainer1.Location = new System.Drawing.Point(0, 39);
             this.radSplitContainer1.Name = "radSplitContainer1";
             // 
             // 
             // 
             this.radSplitContainer1.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.radSplitContainer1.Size = new System.Drawing.Size(1292, 637);
+            this.radSplitContainer1.Size = new System.Drawing.Size(1290, 634);
             this.radSplitContainer1.TabIndex = 20;
             this.radSplitContainer1.TabStop = false;
             // 
@@ -101,7 +104,7 @@
             // 
             // 
             this.splitPanel1.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.splitPanel1.Size = new System.Drawing.Size(233, 637);
+            this.splitPanel1.Size = new System.Drawing.Size(233, 634);
             this.splitPanel1.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(-0.1518692F, 0F);
             this.splitPanel1.SizeInfo.SplitterCorrection = new System.Drawing.Size(-158, 0);
             this.splitPanel1.TabIndex = 0;
@@ -117,41 +120,43 @@
             // 
             // 
             this.splitPanel2.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.splitPanel2.Size = new System.Drawing.Size(792, 637);
+            this.splitPanel2.Size = new System.Drawing.Size(791, 634);
             this.splitPanel2.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(0.2834891F, 0F);
             this.splitPanel2.SizeInfo.SplitterCorrection = new System.Drawing.Size(292, 0);
             this.splitPanel2.TabIndex = 1;
             this.splitPanel2.TabStop = false;
             this.splitPanel2.Text = "splitPanel2";
             // 
-            // splitPanel3
-            // 
-            this.splitPanel3.Location = new System.Drawing.Point(1033, 0);
-            this.splitPanel3.Name = "splitPanel3";
-            // 
-            // 
-            // 
-            this.splitPanel3.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.splitPanel3.Size = new System.Drawing.Size(259, 637);
-            this.splitPanel3.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(-0.1316199F, 0F);
-            this.splitPanel3.SizeInfo.SplitterCorrection = new System.Drawing.Size(-134, 0);
-            this.splitPanel3.TabIndex = 2;
-            this.splitPanel3.TabStop = false;
-            // 
             // radPdfViewer2
             // 
             this.radPdfViewer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radPdfViewer2.Location = new System.Drawing.Point(0, 0);
             this.radPdfViewer2.Name = "radPdfViewer2";
-            this.radPdfViewer2.Size = new System.Drawing.Size(792, 637);
+            this.radPdfViewer2.Size = new System.Drawing.Size(791, 634);
             this.radPdfViewer2.TabIndex = 0;
+            this.radPdfViewer2.ThemeName = "ControlDefault";
             this.radPdfViewer2.ThumbnailsScaleFactor = 0.15F;
+            // 
+            // splitPanel3
+            // 
+            this.splitPanel3.Location = new System.Drawing.Point(1032, 0);
+            this.splitPanel3.Name = "splitPanel3";
+            // 
+            // 
+            // 
+            this.splitPanel3.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.splitPanel3.Size = new System.Drawing.Size(258, 634);
+            this.splitPanel3.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(-0.1316199F, 0F);
+            this.splitPanel3.SizeInfo.SplitterCorrection = new System.Drawing.Size(-134, 0);
+            this.splitPanel3.TabIndex = 2;
+            this.splitPanel3.TabStop = false;
+            this.splitPanel3.ThemeName = "ControlDefault";
             // 
             // Controle
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1292, 675);
+            this.ClientSize = new System.Drawing.Size(1290, 673);
             this.Controls.Add(this.radSplitContainer1);
             this.Controls.Add(this.radPdfViewerNavigator1);
             this.Controls.Add(this.BULabel);
@@ -162,6 +167,7 @@
             this.RootElement.ApplyShapeToControl = true;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Controle Finatech";
+            this.ThemeName = "ControlDefault";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.RadForm1_FormClosed);
             this.Load += new System.EventHandler(this.RadForm1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.radTreeView2)).EndInit();
@@ -173,8 +179,8 @@
             this.splitPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitPanel2)).EndInit();
             this.splitPanel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitPanel3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPdfViewer2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitPanel3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -192,5 +198,6 @@
         private Telerik.WinControls.UI.SplitPanel splitPanel2;
         private Telerik.WinControls.UI.SplitPanel splitPanel3;
         private Telerik.WinControls.UI.RadPdfViewer radPdfViewer2;
+        private Telerik.WinControls.Themes.MaterialTheme materialTheme1;
     }
 }

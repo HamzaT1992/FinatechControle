@@ -12,60 +12,51 @@ using System.Data.SqlClient;
 
 namespace FinatechControle
 {
-    public partial class Banque : UserControl
+    public partial class Caisse : UserControl
     {
         public RadTreeView radTreeView;
         public string id_user_control;
-        public string NumOP;
-        public string NumSerieCheque;
-        public string Date;
-        public string Beneficiaire;
+        public string NumImmatricule;
+        public string DatePiece;
+        public string Salarie;
         public string Reference;
-        public string Montant;
+        public string BU;
+        public string NumProjet;
         public string NumBoite;
-        public Banque()
+
+
+        public Caisse()
         {
             InitializeComponent();
         }
 
-        private void Banque_Load(object sender, EventArgs e)
+        private void Caisse_Load(object sender, EventArgs e)
         {
-            //,[NumOP]
-            //,[NumSerieCheque]
-            //,[Date]
-            //,[Beneficiaire]
-            //,[Reference]
-            //,[Montant]
-            //,[NumBoite]
-            //,[NomDossier]
-            TBNumOP.Text = NumOP;
-            TBNumSerCk.Text = NumSerieCheque;
-            TBDate.Text = Date;
-            TBBeneficiaire.Text = Beneficiaire;
+            TBDatePiece.Text = DatePiece;
+            TBBU.Text = BU;
+            TBNProjet.Text = NumProjet;
+            TBNumBoite.Text = NumBoite;
+            TBNumImm.Text = NumImmatricule;
+            TBSalarie.Text = Salarie;
             TBReference.Text = Reference;
-            TBMt.Text = NumBoite;
-            TBNumBoite.Text = Montant;
         }
 
         private void validChanges_Click(object sender, EventArgs e)
         {
-            var nomDoc = radTreeView.SelectedNode.Text.Replace("'","''");
-            var NumOP = TBNumOP.Text;
-            var NumSerieCheque = TBNumSerCk.Text;
-            var Date = TBDate.Text;
-            var Beneficiaire = TBBeneficiaire.Text;
-            var Reference = TBReference.Text;
-            var Montant = TBMt.Text;
+            var nomDoc = radTreeView.SelectedNode.Text.Replace("'", "''"); ;
+            var Date = TBDatePiece.Text;
+            var NumProjet = TBNProjet.Text;
+            var BU = TBBU.Text;
             var NumBoite = TBNumBoite.Text == "" ? "0" : TBNumBoite.Text;
-
-            if (NumOP == "" || NumSerieCheque == "" || Date == "" || Beneficiaire == "" || Reference == "" || Montant == "" || NumBoite == "")
+            var Ref = TBReference.Text;
+            var Imm = TBNumImm.Text;
+            var salary = TBSalarie.Text;
+            if (Date == "" || NumProjet == "" || BU == "" || Ref == "" || NumBoite == "" || Imm == "" || salary == "")
             {
                 MessageBox.Show("Veillez Remplir tous les champs");
                 return;
             }
-            Montant = Montant == " " ? "0" : Montant;
-            // update vente set [Client]= ,[DateFacture]= ,[Numfacture]= ,[NumProjet]= ,[BU]= ,[Numboite]= where [NomDossier]=
-            var req = $"UPDATE banque SET  [NumOP]='{NumOP}' ,[NumSerieCheque]='{NumSerieCheque}' ,[Date]='{Date}' ,[Beneficiaire]='{Beneficiaire}' ,[Reference]='{Reference}' ,[Montant]={Montant} ,[NumBoite]='{NumBoite}' ,[id_status]=6 ,[id_user_control]={id_user_control} WHERE [NomDossier]='{nomDoc}' " +
+            var req = $"update Caisse set [DatePiece]='{Date}' ,[NumProjet]='{NumProjet}' ,[BU]='{BU}' ,[NumBoite]='{NumBoite}',reference='{Ref}',NumDImatricul='{Imm}',salarie='{salary}',id_status=6,id_user_control={id_user_control} WHERE [NomDossier]='{nomDoc}' " +
                 $"UPDATE FinaTech_Test.dbo.DossiersIndexes SET id_status=6 WHERE NomDossier='{nomDoc}'";
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
             using (SqlConnection cnn = new SqlConnection(constr))

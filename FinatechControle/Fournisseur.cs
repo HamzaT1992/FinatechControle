@@ -30,7 +30,7 @@ namespace FinatechControle
 
         private void validChanges_Click(object sender, EventArgs e)
         {
-            var nomDoc = radTreeView.SelectedNode.Text;
+            var nomDoc = radTreeView.SelectedNode.Text.Replace("'", "''"); ;
             var Fournisseur = TBFournisseur.Text;
             var Date = TBDateFacture.Text;
             var Reference = TBReference.Text;

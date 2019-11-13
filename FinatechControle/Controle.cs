@@ -187,6 +187,29 @@ namespace FinatechControle
                     banque.BringToFront();
                     banque.Dock = DockStyle.Fill;
                 }
+                else if (type == "CAISSES")
+                {
+                    var row = getIndexs(e.Node.Text, "Caisse").Rows[0];
+                    var caisse = new Caisse()
+                    {
+                        radTreeView = radTreeView2,
+                        id_user_control = id_user_control,
+                        DatePiece = row["DatePiece"].ToString(),
+                        NumProjet = row["NumProjet"].ToString(),
+                        BU = row["BU"].ToString(),
+                        NumBoite = row["NumBoite"].ToString(),
+                        Salarie = row["salarie"].ToString(),
+                        NumImmatricule = row["NumDImatricul"].ToString(),
+                        Reference = row["reference"].ToString(),
+                    };
+                    foreach (Control item in splitPanel3.Controls)
+                    {
+                        item.Dispose();
+                    }
+                    splitPanel3.Controls.Add(caisse);
+                    caisse.BringToFront();
+                    caisse.Dock = DockStyle.Fill;
+                }
             }
         }    
         // obtenir les indexes d'un document
@@ -196,8 +219,7 @@ namespace FinatechControle
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
-                string reqdocs = $"select * from {table} where NomDossier = '{nomDoss}'";
-
+                string reqdocs = $"select * from {table} where NomDossier = '{nomDoss.Replace("'","''")}'";
 
                 SqlDataAdapter da = new SqlDataAdapter(reqdocs, cnn);
                 DataTable dt = new DataTable();
