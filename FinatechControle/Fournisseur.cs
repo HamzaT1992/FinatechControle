@@ -44,7 +44,7 @@ namespace FinatechControle
                 return;
             }
 
-            var req = $"update Achat set [Fournisseur]='{Fournisseur}' ,[DateFacture]='{Date}' ,[Reference]='{Reference}' ,[NumProjet]={NumProjet} ,[NumBonCommande]={NumBonCom} ,[BU]='{BU}' ,[NumBoite]={NumBoite},id_status=6,id_user_control={id_user_control} WHERE [NomDossier]='{nomDoc}' " +
+            var req = $"update Achat set [Fournisseur]='{Fournisseur}' ,[DateFacture]='{Date}' ,[Reference]='{Reference}' ,[NumProjet]='{NumProjet}' ,[NumBonCommande]='{NumBonCom}' ,[BU]='{BU}' ,[NumBoite]='{NumBoite}',id_status=6,id_user_control={id_user_control} WHERE [NomDossier]='{nomDoc}' " +
                 $"UPDATE FinaTech_Test.dbo.DossiersIndexes SET id_status=6 WHERE NomDossier='{nomDoc}'";
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
             using (SqlConnection cnn = new SqlConnection(constr))

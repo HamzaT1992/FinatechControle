@@ -43,11 +43,11 @@ namespace FinatechControle
             TBDate.Text = Date;
             TBBeneficiaire.Text = Beneficiaire;
             TBReference.Text = Reference;
-            TBMt.Text = NumBoite;
-            TBNumBoite.Text = Montant;
+            TBMt.Text = Montant;
+            TBNumBoite.Text = NumBoite;
         }
 
-        private void validChanges_Click(object sender, EventArgs e)
+        private void ValidChanges_Click(object sender, EventArgs e)
         {
             var nomDoc = radTreeView.SelectedNode.Text.Replace("'","''");
             var NumOP = TBNumOP.Text;

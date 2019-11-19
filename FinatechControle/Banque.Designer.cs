@@ -78,7 +78,7 @@
             this.validChanges.Size = new System.Drawing.Size(215, 24);
             this.validChanges.TabIndex = 49;
             this.validChanges.Text = "Valider";
-            this.validChanges.Click += new System.EventHandler(this.validChanges_Click);
+            this.validChanges.Click += new System.EventHandler(this.ValidChanges_Click);
             // 
             // TBNumOP
             // 
