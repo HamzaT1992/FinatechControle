@@ -81,5 +81,50 @@ namespace FinatechControle
             TBbu.Text = BU;
             TBNumBoite.Text = NumBoite;
         }
+
+        private void validChanges_Click_1(object sender, EventArgs e)
+        {
+            var nomDoc = radTreeView.SelectedNode.Text.Replace("'", "''");
+            var Fourniss = TBFournisseur.Text;
+            var DateFact = TBDateFacture.Text;
+            var Ref = TBReference.Text;
+            var numProj = TBNumProjet.Text;
+            var numBonCom = TBNumBonCom.Text;
+            var Reference = TBReference.Text;
+            var bu = TBbu.Text;
+            var NumBoite = TBNumBoite.Text == "" ? "0" : TBNumBoite.Text;
+
+            if (Fourniss == "" || DateFact == "" || Ref == "" || numBonCom == "" || Reference == "" || numProj == "" || bu == "" || NumBoite == "")
+            {
+                MessageBox.Show("Veillez Remplir tous les champs");
+                return;
+            }
+            // update vente set [Client]= ,[DateFacture]= ,[Numfacture]= ,[NumProjet]= ,[BU]= ,[Numboite]= where [NomDossier]=
+            var req = $"UPDATE achat SET  [Fournisseur]='{Fourniss}' ,[DateFacture]='{DateFact}' ,[Reference]='{Ref}' ,[NumBonCommande]='{numBonCom}' ,[Reference]='{Reference}' [NumProjet]={numProj},[BU]={bu} ,[NumBoite]='{NumBoite}' ,[id_status]=6 ,[id_user_control]={id_user_control} WHERE [NomDossier]='{nomDoc}' " +
+                $"UPDATE FinaTech_Test.dbo.DossiersIndexes SET id_status=6 WHERE NomDossier='{nomDoc}'";
+            var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
+            using (SqlConnection cnn = new SqlConnection(constr))
+            {
+                cnn.Open();
+                var cmd = new SqlCommand(req, cnn);
+                cmd.ExecuteNonQuery();
+                //MessageBox.Show("Opération effectué!!");
+            }
+            var docControle = radTreeView.SelectedNode;
+            var parent = docControle.Parent;
+            if (radTreeView.SelectedNode.NextNode != null)
+            {
+                radTreeView.SelectedNode = docControle.NextNode;
+            }
+            else
+            {
+                radTreeView.SelectedNode = parent;
+            }
+            parent.Nodes.Remove(docControle);
+            if (radTreeView.SelectedNode == parent)
+            {
+                radTreeView.Nodes.Remove(parent);
+            }
+        }
     }
 }

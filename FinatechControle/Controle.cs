@@ -20,13 +20,14 @@ namespace FinatechControle
     {
         // id utilisateur de controle
         string id_user_control;
-        public Controle(string id_user)
+        public Controle(string id_user, string userControl)
         {
             InitializeComponent();
             id_user_control = id_user;
             //var Boites = new RadTreeNode();
             //Boites.Text = "Boites";
             radTreeView2.SelectedNodeChanged += Node_Changed;
+            radLabel3.Text = userControl;
             //fournisseur1.radTreeView = radTreeView2;
             //splitPanel3
         }
@@ -38,7 +39,7 @@ namespace FinatechControle
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
-                string rqtNumBoites = "select distinct Numboite from DossiersIndexes where id_status=3";
+                string rqtNumBoites = "select distinct Numboite from DossiersIndexes where id_status=3 order by Numboite";
 
 
                 SqlDataAdapter da = new SqlDataAdapter(rqtNumBoites, cnn);
@@ -120,6 +121,7 @@ namespace FinatechControle
                 if (type == "Achat/FOURNISSEUR")
                 {
                     var row = getIndexs(e.Node.Text, "Achat").Rows[0];
+                    radLabel2.Text = row["user_index"].ToString();
                     var frniss = new Fournisseur()
                     {
                         radTreeView = radTreeView2,
@@ -134,6 +136,8 @@ namespace FinatechControle
                     };
                     foreach (Control item in splitPanel3.Controls)
                     {
+                        if (item.GetType() == typeof(RadPanel))
+                            continue;
                         item.Dispose();
                     }
                     splitPanel3.Controls.Add(frniss);
@@ -144,6 +148,7 @@ namespace FinatechControle
                 else if (type == "Vente/Client")
                 {
                     var row = getIndexs(e.Node.Text, "Vente").Rows[0];
+                    radLabel2.Text = row["user_index"].ToString();
                     var client = new Client()
                     {
                         radTreeView = radTreeView2,
@@ -157,6 +162,8 @@ namespace FinatechControle
                     };
                     foreach (Control item in splitPanel3.Controls)
                     {
+                        if (item.GetType() == typeof(RadPanel))
+                            continue;
                         item.Dispose();
                     }
                     splitPanel3.Controls.Add(client);
@@ -167,6 +174,7 @@ namespace FinatechControle
                 else if (type == "BANQUES")
                 {
                     var row = getIndexs(e.Node.Text, "banque").Rows[0];
+                    radLabel2.Text = row["user_index"].ToString();
                     var banque = new Banque()
                     {
                         radTreeView = radTreeView2,
@@ -181,6 +189,8 @@ namespace FinatechControle
                     };
                     foreach (Control item in splitPanel3.Controls)
                     {
+                        if (item.GetType() == typeof(RadPanel))
+                            continue;
                         item.Dispose();
                     }
                     splitPanel3.Controls.Add(banque);
@@ -190,6 +200,7 @@ namespace FinatechControle
                 else if (type == "CAISSES")
                 {
                     var row = getIndexs(e.Node.Text, "Caisse").Rows[0];
+                    radLabel2.Text = row["user_index"].ToString();
                     var caisse = new Caisse()
                     {
                         radTreeView = radTreeView2,
@@ -204,6 +215,8 @@ namespace FinatechControle
                     };
                     foreach (Control item in splitPanel3.Controls)
                     {
+                        if (item.GetType() == typeof(RadPanel))
+                            continue;
                         item.Dispose();
                     }
                     splitPanel3.Controls.Add(caisse);

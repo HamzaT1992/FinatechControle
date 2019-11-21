@@ -60,15 +60,19 @@
             // 
             // clientLabel
             // 
+            this.clientLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.clientLabel.AutoSize = false;
             this.clientLabel.Location = new System.Drawing.Point(33, 76);
             this.clientLabel.Name = "clientLabel";
-            this.clientLabel.Size = new System.Drawing.Size(64, 18);
+            this.clientLabel.Size = new System.Drawing.Size(157, 18);
             this.clientLabel.TabIndex = 36;
             this.clientLabel.Text = "Client";
             // 
             // validChanges
             // 
+            this.validChanges.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.validChanges.Location = new System.Drawing.Point(33, 553);
             this.validChanges.Name = "validChanges";
             this.validChanges.Size = new System.Drawing.Size(215, 24);
@@ -78,6 +82,8 @@
             // 
             // TBClient
             // 
+            this.TBClient.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TBClient.AutoSize = false;
             this.TBClient.Location = new System.Drawing.Point(33, 96);
             this.TBClient.Name = "TBClient";
@@ -86,33 +92,41 @@
             // 
             // dateFactureLabel
             // 
+            this.dateFactureLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dateFactureLabel.AutoSize = false;
             this.dateFactureLabel.Location = new System.Drawing.Point(33, 139);
             this.dateFactureLabel.Name = "dateFactureLabel";
-            this.dateFactureLabel.Size = new System.Drawing.Size(69, 18);
+            this.dateFactureLabel.Size = new System.Drawing.Size(162, 18);
             this.dateFactureLabel.TabIndex = 37;
             this.dateFactureLabel.Text = "Date Facture";
             // 
             // referenceLabel
             // 
+            this.referenceLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.referenceLabel.AutoSize = false;
             this.referenceLabel.Location = new System.Drawing.Point(33, 206);
             this.referenceLabel.Name = "referenceLabel";
-            this.referenceLabel.Size = new System.Drawing.Size(80, 18);
+            this.referenceLabel.Size = new System.Drawing.Size(173, 18);
             this.referenceLabel.TabIndex = 38;
             this.referenceLabel.Text = "Num Facture";
             // 
             // NumProjetLabel
             // 
+            this.NumProjetLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.NumProjetLabel.AutoSize = false;
             this.NumProjetLabel.Location = new System.Drawing.Point(33, 273);
             this.NumProjetLabel.Name = "NumProjetLabel";
-            this.NumProjetLabel.Size = new System.Drawing.Size(51, 18);
+            this.NumProjetLabel.Size = new System.Drawing.Size(144, 18);
             this.NumProjetLabel.TabIndex = 39;
             this.NumProjetLabel.Text = "N° Projet";
             // 
             // TBNumBoite
             // 
+            this.TBNumBoite.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TBNumBoite.AutoSize = false;
             this.TBNumBoite.Location = new System.Drawing.Point(33, 426);
             this.TBNumBoite.Name = "TBNumBoite";
@@ -121,6 +135,8 @@
             // 
             // radLabel1
             // 
+            this.radLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.radLabel1.Location = new System.Drawing.Point(33, 340);
             this.radLabel1.Name = "radLabel1";
             this.radLabel1.Size = new System.Drawing.Size(20, 18);
@@ -129,6 +145,8 @@
             // 
             // TBbu
             // 
+            this.TBbu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TBbu.AutoSize = false;
             this.TBbu.Location = new System.Drawing.Point(33, 361);
             this.TBbu.Name = "TBbu";
@@ -137,15 +155,19 @@
             // 
             // NumBoiteLabel
             // 
+            this.NumBoiteLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.NumBoiteLabel.AutoSize = false;
             this.NumBoiteLabel.Location = new System.Drawing.Point(33, 406);
             this.NumBoiteLabel.Name = "NumBoiteLabel";
-            this.NumBoiteLabel.Size = new System.Drawing.Size(48, 18);
+            this.NumBoiteLabel.Size = new System.Drawing.Size(141, 18);
             this.NumBoiteLabel.TabIndex = 42;
             this.NumBoiteLabel.Text = "N° Boite";
             // 
             // TBNumProjet
             // 
+            this.TBNumProjet.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TBNumProjet.AutoSize = false;
             this.TBNumProjet.Location = new System.Drawing.Point(33, 293);
             this.TBNumProjet.Name = "TBNumProjet";
@@ -154,6 +176,8 @@
             // 
             // TBDateFacture
             // 
+            this.TBDateFacture.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TBDateFacture.AutoSize = false;
             this.TBDateFacture.Location = new System.Drawing.Point(33, 159);
             this.TBDateFacture.Name = "TBDateFacture";
@@ -162,6 +186,8 @@
             // 
             // TBNFacture
             // 
+            this.TBNFacture.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TBNFacture.AutoSize = false;
             this.TBNFacture.Location = new System.Drawing.Point(33, 226);
             this.TBNFacture.Name = "TBNFacture";
@@ -170,6 +196,8 @@
             // 
             // title
             // 
+            this.title.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.title.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.title.Location = new System.Drawing.Point(91, 25);
             this.title.Name = "title";

@@ -52,7 +52,7 @@ namespace FinatechControle
                     return;
                 }
                 Hide();
-                new Controle(id_user).Show();
+                new Controle(id_user, login).Show();
             }
         }
 
