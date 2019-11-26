@@ -129,6 +129,7 @@
     <Compile Include="Client.Designer.cs">
       <DependentUpon>Client.cs</DependentUpon>
     </Compile>
+    <Compile Include="ColumnModified.cs" />
     <Compile Include="Fournisseur.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -197,6 +198,8 @@
     <Content Include="Resources\boite.png" />
     <Content Include="Resources\cardfilebox.png" />
     <Content Include="Resources\document.png" />
+    <Content Include="Resources\error.ico" />
+    <Content Include="Resources\ok.ico" />
     <Content Include="Resources\openfilefolder.png" />
     <Content Include="Resources\redFolder.png" />
     <Content Include="Resources\vioFolder.png" />

@@ -1,6 +1,6 @@
 ﻿namespace FinatechControle
 {
-    partial class Client
+    partial class Cl
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.
@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Cl));
             this.clientLabel = new Telerik.WinControls.UI.RadLabel();
             this.validChanges = new Telerik.WinControls.UI.RadButton();
             this.TBClient = new Telerik.WinControls.UI.RadTextBox();
@@ -42,6 +44,8 @@
             this.TBDateFacture = new Telerik.WinControls.UI.RadTextBox();
             this.TBNFacture = new Telerik.WinControls.UI.RadTextBox();
             this.title = new Telerik.WinControls.UI.RadLabel();
+            this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.clientLabel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.validChanges)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TBClient)).BeginInit();
@@ -56,6 +60,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.TBDateFacture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TBNFacture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.title)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // clientLabel
@@ -89,6 +95,7 @@
             this.TBClient.Name = "TBClient";
             this.TBClient.Size = new System.Drawing.Size(215, 20);
             this.TBClient.TabIndex = 35;
+            this.TBClient.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // dateFactureLabel
             // 
@@ -132,6 +139,7 @@
             this.TBNumBoite.Name = "TBNumBoite";
             this.TBNumBoite.Size = new System.Drawing.Size(215, 20);
             this.TBNumBoite.TabIndex = 48;
+            this.TBNumBoite.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // radLabel1
             // 
@@ -152,6 +160,7 @@
             this.TBbu.Name = "TBbu";
             this.TBbu.Size = new System.Drawing.Size(215, 20);
             this.TBbu.TabIndex = 47;
+            this.TBbu.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // NumBoiteLabel
             // 
@@ -173,6 +182,7 @@
             this.TBNumProjet.Name = "TBNumProjet";
             this.TBNumProjet.Size = new System.Drawing.Size(215, 20);
             this.TBNumProjet.TabIndex = 45;
+            this.TBNumProjet.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // TBDateFacture
             // 
@@ -183,6 +193,7 @@
             this.TBDateFacture.Name = "TBDateFacture";
             this.TBDateFacture.Size = new System.Drawing.Size(215, 20);
             this.TBDateFacture.TabIndex = 43;
+            this.TBDateFacture.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // TBNFacture
             // 
@@ -193,6 +204,7 @@
             this.TBNFacture.Name = "TBNFacture";
             this.TBNFacture.Size = new System.Drawing.Size(215, 20);
             this.TBNFacture.TabIndex = 44;
+            this.TBNFacture.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // title
             // 
@@ -205,7 +217,17 @@
             this.title.TabIndex = 34;
             this.title.Text = "Vente/Client";
             // 
-            // Client
+            // errorProvider2
+            // 
+            this.errorProvider2.ContainerControl = this;
+            this.errorProvider2.Icon = ((System.Drawing.Icon)(resources.GetObject("errorProvider2.Icon")));
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            this.errorProvider1.Icon = ((System.Drawing.Icon)(resources.GetObject("errorProvider1.Icon")));
+            // 
+            // Cl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -223,7 +245,7 @@
             this.Controls.Add(this.TBDateFacture);
             this.Controls.Add(this.TBNFacture);
             this.Controls.Add(this.title);
-            this.Name = "Client";
+            this.Name = "Cl";
             this.Size = new System.Drawing.Size(280, 622);
             this.Load += new System.EventHandler(this.Client_Load);
             ((System.ComponentModel.ISupportInitialize)(this.clientLabel)).EndInit();
@@ -240,6 +262,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.TBDateFacture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TBNFacture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.title)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -261,5 +285,7 @@
         private Telerik.WinControls.UI.RadTextBox TBDateFacture;
         private Telerik.WinControls.UI.RadTextBox TBNFacture;
         private Telerik.WinControls.UI.RadLabel title;
+        private System.Windows.Forms.ErrorProvider errorProvider2;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

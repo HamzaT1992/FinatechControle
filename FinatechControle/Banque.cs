@@ -1,28 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Telerik.WinControls.UI;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Collections.Generic;
+using Telerik.WinControls.UI;
+using System.Reflection;
 
 namespace FinatechControle
 {
     public partial class Banque : UserControl
     {
-        public RadTreeView radTreeView;
+        public Controle controle;
+        public string NomDoc;
         public string id_user_control;
-        public string NumOP;
-        public string NumSerieCheque;
-        public string Date;
-        public string Beneficiaire;
-        public string Reference;
-        public string Montant;
-        public string NumBoite;
+        public string NumBoite { get; set; }
+        public string type = "BANQUES";
+        public string NumOP { get; set; }
+        public string NumSerieCheque { get; set; }
+        public string Date { get; set; }
+        public string Beneficiaire { get; set; }
+        public string Reference { get; set; }
+        public string Montant { get; set; }
+
         public Banque()
         {
             InitializeComponent();
@@ -49,24 +48,69 @@ namespace FinatechControle
 
         private void ValidChanges_Click(object sender, EventArgs e)
         {
-            var nomDoc = radTreeView.SelectedNode.Text.Replace("'","''");
-            var NumOP = TBNumOP.Text;
-            var NumSerieCheque = TBNumSerCk.Text;
-            var Date = TBDate.Text;
-            var Beneficiaire = TBBeneficiaire.Text;
-            var Reference = TBReference.Text;
-            var Montant = TBMt.Text;
-            var NumBoite = TBNumBoite.Text == "" ? "0" : TBNumBoite.Text;
-
-            if (NumOP == "" || NumSerieCheque == "" || Date == "" || Beneficiaire == "" || Reference == "" || Montant == "" || NumBoite == "")
+            
+            Dictionary<string, string> bnq_Values = new Dictionary<string, string>()
             {
-                MessageBox.Show("Veillez Remplir tous les champs");
+                {"NumOP", TBNumOP.Text},
+                {"NumSerieCheque", TBNumSerCk.Text},
+                {"Date", TBDate.Text},
+                {"Beneficiaire", TBBeneficiaire.Text},
+                {"Reference", TBReference.Text},
+                {"Montant", TBMt.Text},
+                {"NumBoite", TBNumBoite.Text}
+            };
+
+            // Verifier la saisie
+            bool allgood = true;
+            var errmsg = "Veillez remplir le champs";
+            foreach (var item in bnq_Values)
+            {
+                if (item.Key == "Montant")
+                    continue;
+                if (item.Value == "")
+                {
+                    allgood = false;
+                    switch (item.Key)
+                    {
+                        case "NumOP":
+                            errorProvider1.SetError(TBNumOP, errmsg);
+                            break;
+                        case "NumSerieCheque":
+                            errorProvider1.SetError(TBNumSerCk, errmsg);
+                            break;
+                        case "Date":
+                            errorProvider1.SetError(TBDate, errmsg);
+                            break;
+                        case "Beneficiaire":
+                            errorProvider1.SetError(TBBeneficiaire, errmsg);
+                            break;
+                        case "Reference":
+                            errorProvider1.SetError(TBReference, errmsg);
+                            break;
+                        case "NumBoite":
+                            errorProvider1.SetError(TBNumBoite, errmsg);
+                            break;
+                    }
+                }
+            }
+
+            if (!allgood)
+            {
+                MessageBox.Show("Veillez remplir tous les champs nécessaire!!");
                 return;
             }
-            Montant = Montant == " " ? "0" : Montant;
+
+            //verifier les chagements des colonnes
+
+            ColumnModified.VerifyChanges(bnq_Values, this);
+
+
+            bnq_Values["NumBoite"] = string.IsNullOrWhiteSpace(TBNumBoite.Text) ? "0" : TBNumBoite.Text;
+            bnq_Values["Montant"] = string.IsNullOrWhiteSpace(Montant) ? "0" : Montant;
+
             // update vente set [Client]= ,[DateFacture]= ,[Numfacture]= ,[NumProjet]= ,[BU]= ,[Numboite]= where [NomDossier]=
-            var req = $"UPDATE banque SET  [NumOP]='{NumOP}' ,[NumSerieCheque]='{NumSerieCheque}' ,[Date]='{Date}' ,[Beneficiaire]='{Beneficiaire}' ,[Reference]='{Reference}' ,[Montant]={Montant} ,[NumBoite]='{NumBoite}' ,[id_status]=6 ,[id_user_control]={id_user_control} WHERE [NomDossier]='{nomDoc}' " +
-                $"UPDATE FinaTech_Test.dbo.DossiersIndexes SET id_status=6 WHERE NomDossier='{nomDoc}'";
+            var req = $"UPDATE banque SET  [NumOP]='{bnq_Values["NumOP"]}' ,[NumSerieCheque]='{bnq_Values["NumSerieCheque"]}' ,[Date]='{bnq_Values["Date"]}' ,[Beneficiaire]='{bnq_Values["Beneficiaire"]}' ,[Reference]='{bnq_Values["Reference"]}' ,[Montant]={bnq_Values["Montant"]} ,[NumBoite]='{bnq_Values["NumBoite"]}' ,[id_status]=6 ,[id_user_control]={id_user_control},date_control=GETDATE() WHERE [NomDossier]='{NomDoc}' " +
+                $"UPDATE FinaTech_Test.dbo.DossiersIndexes SET id_status=6 WHERE NomDossier='{NomDoc}'";
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
             using (SqlConnection cnn = new SqlConnection(constr))
             {
@@ -75,20 +119,20 @@ namespace FinatechControle
                 cmd.ExecuteNonQuery();
                 //MessageBox.Show("Opération effectué!!");
             }
-            var docControle = radTreeView.SelectedNode;
-            var parent = docControle.Parent;
-            if (radTreeView.SelectedNode.NextNode != null)
+            // supprimer le document dans le treeView
+            controle.DelDocFromTreeView();
+        }
+
+        private void TB_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            RadTextBox tb = sender as RadTextBox;
+            if (tb.Text == "")
             {
-                radTreeView.SelectedNode = docControle.NextNode;
+                errorProvider1.SetError(tb, "Veillez remplir le champs");
             }
             else
             {
-                radTreeView.SelectedNode = parent;
-            }
-            parent.Nodes.Remove(docControle);
-            if (radTreeView.SelectedNode == parent)
-            {
-                radTreeView.Nodes.Remove(parent);
+                errorProvider2.SetError(tb, "Correcte");
             }
         }
     }

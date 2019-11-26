@@ -20,6 +20,7 @@ namespace FinatechControle
     {
         // id utilisateur de controle
         string id_user_control;
+        RadTreeNode CurrentNode;
         public Controle(string id_user, string userControl)
         {
             InitializeComponent();
@@ -39,7 +40,7 @@ namespace FinatechControle
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
-                string rqtNumBoites = "select distinct Numboite from DossiersIndexes where id_status=3 order by Numboite";
+                string rqtNumBoites = "select distinct Numboite from DossiersIndexeV where id_status=3 order by Numboite";
 
 
                 SqlDataAdapter da = new SqlDataAdapter(rqtNumBoites, cnn);
@@ -58,7 +59,7 @@ namespace FinatechControle
                         RadTreeNode doc = new RadTreeNode();
                         var doss = item["NomDossier"].ToString();
                         //var pdf = doss.Split('\\')[1];
-                        var path = item["CheminPDF"].ToString();
+                        var path = item["Chemin"].ToString();
                         doc.Text = doss;
                         doc.Value = path;
                         doc.Tag = item["type"].ToString();
@@ -94,7 +95,7 @@ namespace FinatechControle
             {
                 cnn.Open();
                 var boite = numboite == "" ? "Numboite is null" : "Numboite = '" + numboite + "'";
-                string reqdocs = "select * from DossiersIndexes where id_status=3 and " + boite;
+                string reqdocs = "select * from DossiersIndexeV where id_status=3 and " + boite;
 
                 SqlDataAdapter da = new SqlDataAdapter(reqdocs, cnn);
                 DataTable dt = new DataTable();
@@ -110,6 +111,7 @@ namespace FinatechControle
                 try
                 {
                     radPdfViewer2.LoadDocument(e.Node.Value.ToString());
+                    CurrentNode = e.Node;
                 }
                 catch (Exception ex)
                 {
@@ -117,16 +119,20 @@ namespace FinatechControle
                 }
                 // Verifier le type de Document
                 var type = e.Node.Tag.ToString();
+                //  le nom du document
+                var NomDoc = radTreeView2.SelectedNode.Text.Replace("'", "''");
                 // Pour le type Achat/FOURNISSEUR
+
                 if (type == "Achat/FOURNISSEUR")
                 {
                     var row = getIndexs(e.Node.Text, "Achat").Rows[0];
                     radLabel2.Text = row["user_index"].ToString();
-                    var frniss = new Fournisseur()
+                    var frniss = new Fourniss()
                     {
-                        radTreeView = radTreeView2,
+                        controle = this,
+                        NomDoc = NomDoc,
                         id_user_control = id_user_control,
-                        Fourniss = row["Fournisseur"].ToString(),
+                        Fournisseur = row["Fournisseur"].ToString(),
                         DateFacture = row["DateFacture"].ToString(),
                         Reference = row["Reference"].ToString(),
                         NumProjet = row["NumProjet"].ToString(),
@@ -149,11 +155,12 @@ namespace FinatechControle
                 {
                     var row = getIndexs(e.Node.Text, "Vente").Rows[0];
                     radLabel2.Text = row["user_index"].ToString();
-                    var client = new Client()
+                    var client = new Cl()
                     {
-                        radTreeView = radTreeView2,
+                        controle = this,
+                        NomDoc = NomDoc,
                         id_user_control = id_user_control,
-                        Cl = row["Client"].ToString(),
+                        Client = row["Client"].ToString(),
                         DateFacture = row["DateFacture"].ToString(),
                         Numfacture = row["Numfacture"].ToString(),
                         NumProjet = row["NumProjet"].ToString(),
@@ -177,7 +184,8 @@ namespace FinatechControle
                     radLabel2.Text = row["user_index"].ToString();
                     var banque = new Banque()
                     {
-                        radTreeView = radTreeView2,
+                        controle = this,
+                        NomDoc = NomDoc,
                         id_user_control = id_user_control,
                         NumOP = row["NumOP"].ToString(),
                         NumSerieCheque = row["NumSerieCheque"].ToString(),
@@ -197,13 +205,15 @@ namespace FinatechControle
                     banque.BringToFront();
                     banque.Dock = DockStyle.Fill;
                 }
+                // Pour le type CAISSE
                 else if (type == "CAISSES")
                 {
                     var row = getIndexs(e.Node.Text, "Caisse").Rows[0];
                     radLabel2.Text = row["user_index"].ToString();
                     var caisse = new Caisse()
                     {
-                        radTreeView = radTreeView2,
+                        controle = this,
+                        NomDoc = NomDoc,
                         id_user_control = id_user_control,
                         DatePiece = row["DatePiece"].ToString(),
                         NumProjet = row["NumProjet"].ToString(),
@@ -244,6 +254,25 @@ namespace FinatechControle
         private void radLabel1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        public void DelDocFromTreeView()
+        {
+            var docControle = CurrentNode;
+            var parent = docControle.Parent;
+            if (radTreeView2.SelectedNode.NextNode != null)
+            {
+                radTreeView2.SelectedNode = docControle.NextNode;
+            }
+            else
+            {
+                radTreeView2.SelectedNode = parent;
+            }
+            parent.Nodes.Remove(docControle);
+            if (radTreeView2.SelectedNode == parent)
+            {
+                radTreeView2.Nodes.Remove(parent);
+            }
         }
 
         private void RadForm1_FormClosed(object sender, FormClosedEventArgs e)

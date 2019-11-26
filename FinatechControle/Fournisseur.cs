@@ -1,79 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Telerik.WinControls.UI;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Collections.Generic;
+using FinatechControle.Properties;
+using Telerik.WinControls.UI;
 
 namespace FinatechControle
 {
-    public partial class Fournisseur : UserControl
+    public partial class Fourniss : UserControl
     {
-        public RadTreeView radTreeView;
+        public Controle controle;
+        public string NomDoc;
         public string id_user_control;
-        public string Fourniss;
+        public string NumBoite;
+        public string type = "Achat/FOURNISSEUR";
+        public string Fournisseur;
         public string DateFacture;
         public string Reference;
         public string NumProjet;
         public string NumBonCommande;
         public string BU;
-        public string NumBoite;
-        public Fournisseur()
+
+        public Fourniss()
         {
             InitializeComponent();
         }
 
-        private void validChanges_Click(object sender, EventArgs e)
-        {
-            var nomDoc = radTreeView.SelectedNode.Text.Replace("'", "''"); ;
-            var Fournisseur = TBFournisseur.Text;
-            var Date = TBDateFacture.Text;
-            var Reference = TBReference.Text;
-            var NumProjet = TBNumProjet.Text;
-            var NumBonCom = TBNumBonCom.Text;
-            var BU = TBbu.Text;
-            var NumBoite = TBNumBoite.Text == "" ? "0" : TBNumBoite.Text;
-            if (Fournisseur == "" || Date == "" || Reference == "" || NumProjet == "" || NumBonCom == "" || BU == "" || NumBoite == "")
-            {
-                MessageBox.Show("Veillez Remplir tous les champs");
-                return;
-            }
-
-            var req = $"update Achat set [Fournisseur]='{Fournisseur}' ,[DateFacture]='{Date}' ,[Reference]='{Reference}' ,[NumProjet]='{NumProjet}' ,[NumBonCommande]='{NumBonCom}' ,[BU]='{BU}' ,[NumBoite]='{NumBoite}',id_status=6,id_user_control={id_user_control} WHERE [NomDossier]='{nomDoc}' " +
-                $"UPDATE FinaTech_Test.dbo.DossiersIndexes SET id_status=6 WHERE NomDossier='{nomDoc}'";
-            var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
-            using (SqlConnection cnn = new SqlConnection(constr))
-            {
-                cnn.Open();
-                var cmd = new SqlCommand(req, cnn);
-                cmd.ExecuteNonQuery();
-                //MessageBox.Show("Opération effectué!!");
-            }
-            var docControle = radTreeView.SelectedNode;
-            var parent = docControle.Parent;
-            if (radTreeView.SelectedNode.NextNode != null)
-            {
-                radTreeView.SelectedNode = docControle.NextNode;
-            }
-            else
-            {
-                radTreeView.SelectedNode = parent;
-            }
-            parent.Nodes.Remove(docControle);
-            if (radTreeView.SelectedNode == parent)
-            {
-                radTreeView.Nodes.Remove(parent);
-            }
-        }
-
         private void Fournisseur_Load(object sender, EventArgs e)
         {
-            TBFournisseur.Text = Fourniss;
+            TBFournisseur.Text = Fournisseur;
             TBDateFacture.Text = DateFacture;
             TBReference.Text = Reference;
             TBNumProjet.Text = NumProjet;
@@ -82,48 +38,94 @@ namespace FinatechControle
             TBNumBoite.Text = NumBoite;
         }
 
-        private void validChanges_Click_1(object sender, EventArgs e)
+        private void ValidChanges_Click(object sender, EventArgs e)
         {
-            var nomDoc = radTreeView.SelectedNode.Text.Replace("'", "''");
-            var Fourniss = TBFournisseur.Text;
-            var DateFact = TBDateFacture.Text;
-            var Ref = TBReference.Text;
-            var numProj = TBNumProjet.Text;
-            var numBonCom = TBNumBonCom.Text;
-            var Reference = TBReference.Text;
-            var bu = TBbu.Text;
-            var NumBoite = TBNumBoite.Text == "" ? "0" : TBNumBoite.Text;
-
-            if (Fourniss == "" || DateFact == "" || Ref == "" || numBonCom == "" || Reference == "" || numProj == "" || bu == "" || NumBoite == "")
+            Dictionary<string, string> Fourn_Values = new Dictionary<string, string>
             {
-                MessageBox.Show("Veillez Remplir tous les champs");
+                { "Fournisseur", TBFournisseur.Text },
+                { "DateFacture", TBDateFacture.Text },
+                { "NumProjet", TBNumProjet.Text },
+                { "NumBonCommande", string.IsNullOrWhiteSpace(TBNumBonCom.Text) ? "" : TBNumBonCom.Text },
+                { "NumBoite", TBNumBoite.Text },
+                { "Reference", TBReference.Text },
+                { "BU", TBbu.Text }
+            };
+
+            // Verifier la saisie
+            bool allgood = true;
+            var errmsg = "Veillez remplir le champs";
+            foreach (var item in Fourn_Values)
+            {
+                if (item.Key == "NumBonCommande")
+                    continue;
+                if (item.Value == "")
+                {
+                    allgood = false;
+                    switch (item.Key)
+                    {
+                        case "Fournisseur":
+                            errorProvider1.SetError(TBFournisseur, errmsg);
+                            break;
+                        case "DateFacture":
+                            errorProvider1.SetError(TBDateFacture, errmsg);
+                            break;
+                        case "NumBonCommande":
+                            errorProvider1.SetError(TBNumBonCom, errmsg);
+                            break;
+                        case "NumProjet":
+                            errorProvider1.SetError(TBNumProjet, errmsg);
+                            break;
+                        case "NumBoite":
+                            errorProvider1.SetError(TBNumBoite, errmsg);
+                            break;
+                        case "Reference":
+                            errorProvider1.SetError(TBReference, errmsg);
+                            break;
+                        case "BU":
+                            errorProvider1.SetError(TBbu, errmsg);
+                            break;
+                    }
+                }
+            }
+
+            if (!allgood)
+            {
+                MessageBox.Show("Veillez remplir tous les champs nécessaire!!");
                 return;
             }
-            // update vente set [Client]= ,[DateFacture]= ,[Numfacture]= ,[NumProjet]= ,[BU]= ,[Numboite]= where [NomDossier]=
-            var req = $"UPDATE achat SET  [Fournisseur]='{Fourniss}' ,[DateFacture]='{DateFact}' ,[Reference]='{Ref}' ,[NumBonCommande]='{numBonCom}' ,[Reference]='{Reference}' [NumProjet]={numProj},[BU]={bu} ,[NumBoite]='{NumBoite}' ,[id_status]=6 ,[id_user_control]={id_user_control} WHERE [NomDossier]='{nomDoc}' " +
-                $"UPDATE FinaTech_Test.dbo.DossiersIndexes SET id_status=6 WHERE NomDossier='{nomDoc}'";
+
+            //verifier les chagements des colonnes
+            ColumnModified.VerifyChanges(Fourn_Values, this);
+
+            Fourn_Values["NumBonCommande"] = string.IsNullOrWhiteSpace(TBNumBonCom.Text) ? "null" : TBNumBonCom.Text;
+            Fourn_Values["NumBoite"] = TBNumBoite.Text == "" ? "0" : TBNumBoite.Text;
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
+
+                // update vente set [Client]= ,[DateFacture]= ,[Numfacture]= ,[NumProjet]= ,[BU]= ,[Numboite]= where [NomDossier]=
+                var req = $"UPDATE achat SET  [Fournisseur]='{Fourn_Values["Fournisseur"]}' ,[DateFacture]='{Fourn_Values["DateFact"]}' ,[Reference]='{Fourn_Values["Reference"]}' ,[NumBonCommande]={Fourn_Values["NumBonCommande"]}, [NumProjet]='{Fourn_Values["NumProjet"]}',[BU]='{Fourn_Values["BU"]}' ,[NumBoite]='{Fourn_Values["NumBoite"]}' ,[id_status]=6 ,[id_user_control]={id_user_control},date_control=GETDATE() WHERE [NomDossier]='{NomDoc}' " +
+                    $"UPDATE FinaTech_Test.dbo.DossiersIndexes SET id_status=6 WHERE NomDossier='{NomDoc}'";
+
                 var cmd = new SqlCommand(req, cnn);
                 cmd.ExecuteNonQuery();
                 //MessageBox.Show("Opération effectué!!");
             }
-            var docControle = radTreeView.SelectedNode;
-            var parent = docControle.Parent;
-            if (radTreeView.SelectedNode.NextNode != null)
+            // supprimer le document dans le treeView
+            controle.DelDocFromTreeView();
+        }
+
+        private void TB_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            RadTextBox tb = sender as RadTextBox;
+            if (tb.Text == "")
             {
-                radTreeView.SelectedNode = docControle.NextNode;
+                errorProvider1.SetError(tb, "Veillez remplir le champs");
             }
             else
             {
-                radTreeView.SelectedNode = parent;
-            }
-            parent.Nodes.Remove(docControle);
-            if (radTreeView.SelectedNode == parent)
-            {
-                radTreeView.Nodes.Remove(parent);
+                errorProvider2.SetError(tb, "Correcte");
             }
         }
     }

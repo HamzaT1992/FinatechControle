@@ -1,6 +1,6 @@
 ﻿namespace FinatechControle
 {
-    partial class Fournisseur
+    partial class Fourniss
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.
@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Fourniss));
             this.fournisseurLabel = new Telerik.WinControls.UI.RadLabel();
             this.validChanges = new Telerik.WinControls.UI.RadButton();
             this.TBFournisseur = new Telerik.WinControls.UI.RadTextBox();
@@ -44,6 +46,8 @@
             this.TBDateFacture = new Telerik.WinControls.UI.RadTextBox();
             this.TBReference = new Telerik.WinControls.UI.RadTextBox();
             this.title = new Telerik.WinControls.UI.RadLabel();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.fournisseurLabel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.validChanges)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TBFournisseur)).BeginInit();
@@ -60,6 +64,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.TBDateFacture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TBReference)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.title)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
             this.SuspendLayout();
             // 
             // fournisseurLabel
@@ -82,7 +88,7 @@
             this.validChanges.Size = new System.Drawing.Size(215, 24);
             this.validChanges.TabIndex = 49;
             this.validChanges.Text = "Valider";
-            this.validChanges.Click += new System.EventHandler(this.validChanges_Click_1);
+            this.validChanges.Click += new System.EventHandler(this.ValidChanges_Click);
             // 
             // TBFournisseur
             // 
@@ -93,6 +99,7 @@
             this.TBFournisseur.Name = "TBFournisseur";
             this.TBFournisseur.Size = new System.Drawing.Size(215, 20);
             this.TBFournisseur.TabIndex = 35;
+            this.TBFournisseur.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // dateFactureLabel
             // 
@@ -146,6 +153,7 @@
             this.TBNumBoite.Name = "TBNumBoite";
             this.TBNumBoite.Size = new System.Drawing.Size(215, 20);
             this.TBNumBoite.TabIndex = 48;
+            this.TBNumBoite.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // radLabel1
             // 
@@ -177,6 +185,7 @@
             this.TBbu.Name = "TBbu";
             this.TBbu.Size = new System.Drawing.Size(215, 20);
             this.TBbu.TabIndex = 47;
+            this.TBbu.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // NumBoiteLabel
             // 
@@ -198,6 +207,7 @@
             this.TBNumProjet.Name = "TBNumProjet";
             this.TBNumProjet.Size = new System.Drawing.Size(215, 20);
             this.TBNumProjet.TabIndex = 45;
+            this.TBNumProjet.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // TBDateFacture
             // 
@@ -208,6 +218,7 @@
             this.TBDateFacture.Name = "TBDateFacture";
             this.TBDateFacture.Size = new System.Drawing.Size(215, 20);
             this.TBDateFacture.TabIndex = 43;
+            this.TBDateFacture.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // TBReference
             // 
@@ -218,6 +229,7 @@
             this.TBReference.Name = "TBReference";
             this.TBReference.Size = new System.Drawing.Size(215, 20);
             this.TBReference.TabIndex = 44;
+            this.TBReference.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // title
             // 
@@ -229,6 +241,16 @@
             this.title.Size = new System.Drawing.Size(161, 24);
             this.title.TabIndex = 34;
             this.title.Text = "Achat/FOURNISSEUR";
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            this.errorProvider1.Icon = ((System.Drawing.Icon)(resources.GetObject("errorProvider1.Icon")));
+            // 
+            // errorProvider2
+            // 
+            this.errorProvider2.ContainerControl = this;
+            this.errorProvider2.Icon = ((System.Drawing.Icon)(resources.GetObject("errorProvider2.Icon")));
             // 
             // Fournisseur
             // 
@@ -269,6 +291,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.TBDateFacture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TBReference)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.title)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -292,5 +316,7 @@
         private Telerik.WinControls.UI.RadTextBox TBDateFacture;
         private Telerik.WinControls.UI.RadTextBox TBReference;
         private Telerik.WinControls.UI.RadLabel title;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider2;
     }
 }

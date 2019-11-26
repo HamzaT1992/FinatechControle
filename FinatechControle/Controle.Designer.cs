@@ -323,7 +323,6 @@
         private Telerik.WinControls.UI.RadPdfViewer radPdfViewer2;
         private Telerik.WinControls.UI.RadPanel radPanel1;
         private Telerik.WinControls.UI.RadPanel radPanel3;
-        private Telerik.WinControls.UI.RadLabel radLabel2;
         private Telerik.WinControls.UI.RadLabel radLabel1;
         private Telerik.WinControls.UI.RadPanel radPanel2;
         private Telerik.WinControls.UI.RadPanel radPanel4;
@@ -331,5 +330,6 @@
         private Telerik.WinControls.UI.RadLabel radLabel4;
         private Telerik.WinControls.UI.RadPanel radPanel5;
         private Telerik.WinControls.UI.RadPanel radPanel6;
+        public Telerik.WinControls.UI.RadLabel radLabel2;
     }
 }

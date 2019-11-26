@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Caisse));
             this.clientLabel = new Telerik.WinControls.UI.RadLabel();
             this.validChanges = new Telerik.WinControls.UI.RadButton();
             this.TBDatePiece = new Telerik.WinControls.UI.RadTextBox();
@@ -44,6 +46,8 @@
             this.radLabel2 = new Telerik.WinControls.UI.RadLabel();
             this.TBReference = new Telerik.WinControls.UI.RadTextBox();
             this.radLabel3 = new Telerik.WinControls.UI.RadLabel();
+            this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.clientLabel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.validChanges)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TBDatePiece)).BeginInit();
@@ -60,6 +64,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TBReference)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // clientLabel
@@ -82,7 +88,7 @@
             this.validChanges.Size = new System.Drawing.Size(215, 24);
             this.validChanges.TabIndex = 63;
             this.validChanges.Text = "Valider";
-            this.validChanges.Click += new System.EventHandler(this.validChanges_Click);
+            this.validChanges.Click += new System.EventHandler(this.ValidChanges_Click);
             // 
             // TBDatePiece
             // 
@@ -93,6 +99,7 @@
             this.TBDatePiece.Name = "TBDatePiece";
             this.TBDatePiece.Size = new System.Drawing.Size(215, 20);
             this.TBDatePiece.TabIndex = 51;
+            this.TBDatePiece.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // dateFactureLabel
             // 
@@ -125,6 +132,7 @@
             this.TBNumBoite.Name = "TBNumBoite";
             this.TBNumBoite.Size = new System.Drawing.Size(215, 20);
             this.TBNumBoite.TabIndex = 62;
+            this.TBNumBoite.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // NumBoiteLabel
             // 
@@ -146,6 +154,7 @@
             this.TBBU.Name = "TBBU";
             this.TBBU.Size = new System.Drawing.Size(215, 20);
             this.TBBU.TabIndex = 58;
+            this.TBBU.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // TBNProjet
             // 
@@ -156,6 +165,7 @@
             this.TBNProjet.Name = "TBNProjet";
             this.TBNProjet.Size = new System.Drawing.Size(215, 20);
             this.TBNProjet.TabIndex = 59;
+            this.TBNProjet.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // title
             // 
@@ -177,6 +187,7 @@
             this.TBNumImm.Name = "TBNumImm";
             this.TBNumImm.Size = new System.Drawing.Size(215, 20);
             this.TBNumImm.TabIndex = 51;
+            this.TBNumImm.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // radLabel1
             // 
@@ -198,6 +209,7 @@
             this.TBSalarie.Name = "TBSalarie";
             this.TBSalarie.Size = new System.Drawing.Size(215, 20);
             this.TBSalarie.TabIndex = 51;
+            this.TBSalarie.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // radLabel2
             // 
@@ -219,6 +231,7 @@
             this.TBReference.Name = "TBReference";
             this.TBReference.Size = new System.Drawing.Size(215, 20);
             this.TBReference.TabIndex = 58;
+            this.TBReference.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // radLabel3
             // 
@@ -230,6 +243,16 @@
             this.radLabel3.Size = new System.Drawing.Size(169, 18);
             this.radLabel3.TabIndex = 53;
             this.radLabel3.Text = "Référence";
+            // 
+            // errorProvider2
+            // 
+            this.errorProvider2.ContainerControl = this;
+            this.errorProvider2.Icon = ((System.Drawing.Icon)(resources.GetObject("errorProvider2.Icon")));
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            this.errorProvider1.Icon = ((System.Drawing.Icon)(resources.GetObject("errorProvider1.Icon")));
             // 
             // Caisse
             // 
@@ -270,6 +293,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TBReference)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -293,5 +318,7 @@
         private Telerik.WinControls.UI.RadLabel radLabel2;
         private Telerik.WinControls.UI.RadTextBox TBReference;
         private Telerik.WinControls.UI.RadLabel radLabel3;
+        private System.Windows.Forms.ErrorProvider errorProvider2;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

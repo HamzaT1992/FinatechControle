@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Banque));
             this.fournisseurLabel = new Telerik.WinControls.UI.RadLabel();
             this.validChanges = new Telerik.WinControls.UI.RadButton();
             this.TBNumOP = new Telerik.WinControls.UI.RadTextBox();
@@ -44,6 +46,8 @@
             this.title = new Telerik.WinControls.UI.RadLabel();
             this.TBNumSerCk = new Telerik.WinControls.UI.RadTextBox();
             this.radLabel2 = new Telerik.WinControls.UI.RadLabel();
+            this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.fournisseurLabel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.validChanges)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TBNumOP)).BeginInit();
@@ -60,6 +64,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.title)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TBNumSerCk)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // fournisseurLabel
@@ -93,6 +99,7 @@
             this.TBNumOP.Name = "TBNumOP";
             this.TBNumOP.Size = new System.Drawing.Size(215, 20);
             this.TBNumOP.TabIndex = 35;
+            this.TBNumOP.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // dateFactureLabel
             // 
@@ -136,6 +143,7 @@
             this.TBNumBoite.Name = "TBNumBoite";
             this.TBNumBoite.Size = new System.Drawing.Size(215, 20);
             this.TBNumBoite.TabIndex = 48;
+            this.TBNumBoite.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // radLabel1
             // 
@@ -177,6 +185,7 @@
             this.TBBeneficiaire.Name = "TBBeneficiaire";
             this.TBBeneficiaire.Size = new System.Drawing.Size(215, 20);
             this.TBBeneficiaire.TabIndex = 45;
+            this.TBBeneficiaire.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // TBDate
             // 
@@ -187,6 +196,7 @@
             this.TBDate.Name = "TBDate";
             this.TBDate.Size = new System.Drawing.Size(215, 20);
             this.TBDate.TabIndex = 43;
+            this.TBDate.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // TBReference
             // 
@@ -197,6 +207,7 @@
             this.TBReference.Name = "TBReference";
             this.TBReference.Size = new System.Drawing.Size(215, 20);
             this.TBReference.TabIndex = 44;
+            this.TBReference.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // title
             // 
@@ -218,6 +229,7 @@
             this.TBNumSerCk.Name = "TBNumSerCk";
             this.TBNumSerCk.Size = new System.Drawing.Size(215, 20);
             this.TBNumSerCk.TabIndex = 35;
+            this.TBNumSerCk.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // radLabel2
             // 
@@ -229,6 +241,16 @@
             this.radLabel2.Size = new System.Drawing.Size(206, 18);
             this.radLabel2.TabIndex = 36;
             this.radLabel2.Text = "Num Série Chèque";
+            // 
+            // errorProvider2
+            // 
+            this.errorProvider2.ContainerControl = this;
+            this.errorProvider2.Icon = ((System.Drawing.Icon)(resources.GetObject("errorProvider2.Icon")));
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            this.errorProvider1.Icon = ((System.Drawing.Icon)(resources.GetObject("errorProvider1.Icon")));
             // 
             // Banque
             // 
@@ -269,6 +291,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.title)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TBNumSerCk)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -292,5 +316,7 @@
         private Telerik.WinControls.UI.RadLabel title;
         private Telerik.WinControls.UI.RadTextBox TBNumSerCk;
         private Telerik.WinControls.UI.RadLabel radLabel2;
+        private System.Windows.Forms.ErrorProvider errorProvider2;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

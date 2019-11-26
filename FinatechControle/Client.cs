@@ -1,35 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Telerik.WinControls.UI;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Collections.Generic;
+using Telerik.WinControls.UI;
 
 namespace FinatechControle
 {
-    public partial class Client : UserControl
+    public partial class Cl : UserControl
     {
-        public RadTreeView radTreeView;
+        public Controle controle;
+        public string NomDoc;
         public string id_user_control;
-        public string Cl;
+        public string NumBoite;
+        public string type = "Vente/Client";
+        public string Client;
         public string DateFacture;
         public string Numfacture;
         public string NumProjet;
         public string BU;
-        public string NumBoite;
-        public Client()
+
+        public Cl()
         {
             InitializeComponent();
         }
 
         private void Client_Load(object sender, EventArgs e)
         {
-            TBClient.Text = Cl;
+            TBClient.Text = Client;
             TBDateFacture.Text = DateFacture;
             TBNFacture.Text = Numfacture;
             TBNumProjet.Text = NumProjet;
@@ -39,24 +37,64 @@ namespace FinatechControle
 
         private void validChanges_Click(object sender, EventArgs e)
         {
-            var nomDoc = radTreeView.SelectedNode.Text.Replace("'", "''"); ;
-            var Client = TBClient.Text;
-            var DateFacture = TBDateFacture.Text;
-            var Numfacture = TBNFacture.Text;
-            var NumProjet = TBNumProjet.Text;
-            var BU = TBbu.Text;
-            var NumBoite = TBNumBoite.Text == "" ? "0" : TBNumBoite.Text;
-
-            if (Client == "" || DateFacture == "" || Numfacture == "" || NumProjet == "" || BU == "" || NumBoite == "")
+            Dictionary<string, string> cl_Values = new Dictionary<string, string>()
             {
-                MessageBox.Show("Veillez Remplir tous les champs");
+                {"Client", TBClient.Text},
+                {"DateFacture", TBDateFacture.Text},
+                {"Numfacture", TBNFacture.Text},
+                {"NumProjet", TBNumProjet.Text},
+                {"BU", TBbu.Text},
+                {"NumBoite", TBNumBoite.Text},
+            };
+
+            // Verifier la saisie
+            bool allgood = true;
+            var errmsg = "Veillez remplir le champs";
+            foreach (var item in cl_Values)
+            {
+                if (item.Value == "")
+                {
+                    allgood = false;
+                    switch (item.Key)
+                    {
+                        case "Client":
+                            errorProvider1.SetError(TBClient, errmsg);
+                            break;
+                        case "DateFacture":
+                            errorProvider1.SetError(TBDateFacture, errmsg);
+                            break;
+                        case "Numfacture":
+                            errorProvider1.SetError(TBNFacture, errmsg);
+                            break;
+                        case "NumProjet":
+                            errorProvider1.SetError(TBNumProjet, errmsg);
+                            break;
+                        case "BU":
+                            errorProvider1.SetError(TBbu, errmsg);
+                            break;
+                        case "NumBoite":
+                            errorProvider1.SetError(TBNumBoite, errmsg);
+                            break;
+                    }
+                }
+            }
+
+            if (!allgood)
+            {
+                MessageBox.Show("Veillez remplir tous les champs nécessaire!!");
                 return;
             }
 
+            //verifier les chagements des colonnes
+            ColumnModified.VerifyChanges(cl_Values, this);
+
+            cl_Values["NumBoite"] = string.IsNullOrWhiteSpace(TBNumBoite.Text) ? "0" : TBNumBoite.Text;
+
             // update vente set [Client]= ,[DateFacture]= ,[Numfacture]= ,[NumProjet]= ,[BU]= ,[Numboite]= where [NomDossier]=
-            var req = $"UPDATE vente SET [Client]='{Client}' ,[DateFacture]='{DateFacture}' ,[Numfacture]='{Numfacture}' ,[NumProjet]='{NumProjet}' ,[BU]='{BU}' ,[NumBoite]='{NumBoite}',id_status=6,id_user_control='{id_user_control}' WHERE [NomDossier]='{nomDoc}' " +
-                $"UPDATE FinaTech_Test.dbo.DossiersIndexes SET id_status=6 WHERE NomDossier='{nomDoc}'";
+            var req = $"UPDATE vente SET [Client]='{cl_Values["Client"]}' ,[DateFacture]='{cl_Values["DateFacture"]}' ,[Numfacture]='{cl_Values["Numfacture"]}' ,[NumProjet]='{cl_Values["NumProjet"]}' ,[BU]='{cl_Values["BU"]}' ,[NumBoite]='{cl_Values["NumBoite"]}',id_status=6,id_user_control='{id_user_control}',date_control=GETDATE() WHERE [NomDossier]='{NomDoc}' " +
+                        $"UPDATE FinaTech_Test.dbo.DossiersIndexes SET id_status=6 WHERE NomDossier='{NomDoc}'";
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
+
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
@@ -64,20 +102,20 @@ namespace FinatechControle
                 cmd.ExecuteNonQuery();
                 //MessageBox.Show("Opération effectué!!");
             }
-            var docControle = radTreeView.SelectedNode;
-            var parent = docControle.Parent;
-            if (radTreeView.SelectedNode.NextNode != null)
+            // supprimer le document dans le treeView
+            controle.DelDocFromTreeView();
+        }
+
+        private void TB_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            RadTextBox tb = sender as RadTextBox;
+            if (tb.Text == "")
             {
-                radTreeView.SelectedNode = docControle.NextNode;
+                errorProvider1.SetError(tb, "Veillez remplir le champs");
             }
             else
             {
-                radTreeView.SelectedNode = parent;
-            }
-            parent.Nodes.Remove(docControle);
-            if (radTreeView.SelectedNode == parent)
-            {
-                radTreeView.Nodes.Remove(parent);
+                errorProvider2.SetError(tb, "Correcte");
             }
         }
     }
