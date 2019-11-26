@@ -66,12 +66,6 @@ namespace FinatechControle
                         case "Numfacture":
                             errorProvider1.SetError(TBNFacture, errmsg);
                             break;
-                        case "NumProjet":
-                            errorProvider1.SetError(TBNumProjet, errmsg);
-                            break;
-                        case "BU":
-                            errorProvider1.SetError(TBbu, errmsg);
-                            break;
                         case "NumBoite":
                             errorProvider1.SetError(TBNumBoite, errmsg);
                             break;

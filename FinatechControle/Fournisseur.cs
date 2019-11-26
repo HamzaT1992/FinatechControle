@@ -50,14 +50,11 @@ namespace FinatechControle
                 { "Reference", TBReference.Text },
                 { "BU", TBbu.Text }
             };
-
             // Verifier la saisie
             bool allgood = true;
             var errmsg = "Veillez remplir le champs";
             foreach (var item in Fourn_Values)
             {
-                if (item.Key == "NumBonCommande")
-                    continue;
                 if (item.Value == "")
                 {
                     allgood = false;
@@ -69,20 +66,11 @@ namespace FinatechControle
                         case "DateFacture":
                             errorProvider1.SetError(TBDateFacture, errmsg);
                             break;
-                        case "NumBonCommande":
-                            errorProvider1.SetError(TBNumBonCom, errmsg);
-                            break;
-                        case "NumProjet":
-                            errorProvider1.SetError(TBNumProjet, errmsg);
-                            break;
                         case "NumBoite":
                             errorProvider1.SetError(TBNumBoite, errmsg);
                             break;
                         case "Reference":
                             errorProvider1.SetError(TBReference, errmsg);
-                            break;
-                        case "BU":
-                            errorProvider1.SetError(TBbu, errmsg);
                             break;
                     }
                 }

@@ -51,11 +51,12 @@ namespace FinatechControle
             };
 
             // Verifier la saisie
+
             bool allgood = true;
             var errmsg = "Veillez remplir le champs";
             foreach (var item in cs_Values)
             {
-                if (item.Value == "")
+                if (string.IsNullOrWhiteSpace(item.Value))
                 {
                     allgood = false;
                     switch (item.Key)
@@ -65,12 +66,6 @@ namespace FinatechControle
                             break;
                         case "NumProjet":
                             errorProvider1.SetError(TBNProjet, errmsg);
-                            break;
-                        case "BU":
-                            errorProvider1.SetError(TBBU, errmsg);
-                            break;
-                        case "Reference":
-                            errorProvider1.SetError(TBReference, errmsg);
                             break;
                         case "NumDImatricul":
                             errorProvider1.SetError(TBNumImm, errmsg);

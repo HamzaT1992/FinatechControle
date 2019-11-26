@@ -119,6 +119,7 @@ namespace FinatechControle
                 }
                 // Verifier le type de Document
                 var type = e.Node.Tag.ToString();
+                
                 //  le nom du document
                 var NomDoc = radTreeView2.SelectedNode.Text.Replace("'", "''");
                 // Pour le type Achat/FOURNISSEUR
@@ -127,6 +128,7 @@ namespace FinatechControle
                 {
                     var row = getIndexs(e.Node.Text, "Achat").Rows[0];
                     radLabel2.Text = row["user_index"].ToString();
+                    CalcTauxErr(type, row["user_index"].ToString());
                     var frniss = new Fourniss()
                     {
                         controle = this,
@@ -155,6 +157,7 @@ namespace FinatechControle
                 {
                     var row = getIndexs(e.Node.Text, "Vente").Rows[0];
                     radLabel2.Text = row["user_index"].ToString();
+                    CalcTauxErr(type, row["user_index"].ToString());
                     var client = new Cl()
                     {
                         controle = this,
@@ -182,6 +185,7 @@ namespace FinatechControle
                 {
                     var row = getIndexs(e.Node.Text, "banque").Rows[0];
                     radLabel2.Text = row["user_index"].ToString();
+                    CalcTauxErr(type, row["user_index"].ToString());
                     var banque = new Banque()
                     {
                         controle = this,
@@ -210,6 +214,7 @@ namespace FinatechControle
                 {
                     var row = getIndexs(e.Node.Text, "Caisse").Rows[0];
                     radLabel2.Text = row["user_index"].ToString();
+                    CalcTauxErr(type, row["user_index"].ToString());
                     var caisse = new Caisse()
                     {
                         controle = this,
@@ -278,6 +283,22 @@ namespace FinatechControle
         private void RadForm1_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
+        }
+
+        private void CalcTauxErr(string type, string user_index)
+        {
+            var req = $"SELECT  "
+                    + $"count(nom_document) * 100 / (select Count(*) FROM DossiersIndexeV WHERE user_index = '{user_index}' and Type = '{type}') "
+                    + $" FROM Modifications"
+                    + $" WHERE user_index = '{user_index}'"
+                    + $" and type_projet = '{type}'";
+            var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
+            using (SqlConnection cnn = new SqlConnection(constr))
+            {
+                cnn.Open();
+                int tauxType = (int)new SqlCommand(req, cnn).ExecuteScalar();
+                TxLabel.Text = $"{tauxType} %";
+            }
         }
     }
 }

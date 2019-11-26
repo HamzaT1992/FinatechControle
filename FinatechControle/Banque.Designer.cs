@@ -185,7 +185,6 @@
             this.TBBeneficiaire.Name = "TBBeneficiaire";
             this.TBBeneficiaire.Size = new System.Drawing.Size(215, 20);
             this.TBBeneficiaire.TabIndex = 45;
-            this.TBBeneficiaire.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // TBDate
             // 
@@ -207,7 +206,6 @@
             this.TBReference.Name = "TBReference";
             this.TBReference.Size = new System.Drawing.Size(215, 20);
             this.TBReference.TabIndex = 44;
-            this.TBReference.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // title
             // 
@@ -229,7 +227,6 @@
             this.TBNumSerCk.Name = "TBNumSerCk";
             this.TBNumSerCk.Size = new System.Drawing.Size(215, 20);
             this.TBNumSerCk.TabIndex = 35;
-            this.TBNumSerCk.Validating += new System.ComponentModel.CancelEventHandler(this.TB_Validating);
             // 
             // radLabel2
             // 

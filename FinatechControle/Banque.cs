@@ -75,17 +75,8 @@ namespace FinatechControle
                         case "NumOP":
                             errorProvider1.SetError(TBNumOP, errmsg);
                             break;
-                        case "NumSerieCheque":
-                            errorProvider1.SetError(TBNumSerCk, errmsg);
-                            break;
                         case "Date":
                             errorProvider1.SetError(TBDate, errmsg);
-                            break;
-                        case "Beneficiaire":
-                            errorProvider1.SetError(TBBeneficiaire, errmsg);
-                            break;
-                        case "Reference":
-                            errorProvider1.SetError(TBReference, errmsg);
                             break;
                         case "NumBoite":
                             errorProvider1.SetError(TBNumBoite, errmsg);
@@ -135,5 +126,6 @@ namespace FinatechControle
                 errorProvider2.SetError(tb, "Correcte");
             }
         }
+
     }
 }
