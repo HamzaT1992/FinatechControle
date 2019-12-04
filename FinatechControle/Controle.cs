@@ -5,9 +5,12 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using Telerik.WinControls;
@@ -20,7 +23,8 @@ namespace FinatechControle
     {
         // id utilisateur de controle
         string id_user_control;
-        RadTreeNode CurrentNode;
+        RadTreeNode CurrentNode = new RadTreeNode();
+
         public Controle(string id_user, string userControl)
         {
             InitializeComponent();
@@ -35,35 +39,59 @@ namespace FinatechControle
 
         private void RadForm1_Load(object sender, EventArgs e)
         {
+            openxml.Click += Openxml_Click;
+            rescan.Click += Rescan_Click;
+            nodeCopyName.Click += NodeCopyName_Click;
             // Chareger les boites et les dossiers
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
-                string rqtNumBoites = "select distinct Numboite from DossiersIndexeV where id_status=3 order by Numboite";
+                string rqtNumBoites = "select distinct Numboite from DossiersIndexeV where id_status in (3,6) order by Numboite";
 
 
                 SqlDataAdapter da = new SqlDataAdapter(rqtNumBoites, cnn);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
+                
+                
+
                 foreach (DataRow row in dt.Rows)
                 {
-
+                    
                     RadTreeNode boite = new RadTreeNode();
                     var numBoite = row["Numboite"].ToString();
                     
                     boite.Value = numBoite;
                     var Docs = getDocs(numBoite);
+                    var alldocsCount = Docs.Rows.Count;
+                    int Fl_oks = 0;
                     foreach (DataRow item in Docs.Rows)
                     {
                         RadTreeNode doc = new RadTreeNode();
+                        var user_index = item["user_index"].ToString();
                         var doss = item["NomDossier"].ToString();
                         //var pdf = doss.Split('\\')[1];
                         var path = item["Chemin"].ToString();
-                        doc.Text = doss;
+
+                        var statusDoc = (int)item["id_status"];
+                        var image = "folder_closed";
+                        if (statusDoc == 6)
+                        {
+                            Fl_oks++;
+                            image = "folder_ok";
+                        }
+                        doc.Text = $"({user_index}) {doss}";
                         doc.Value = path;
-                        doc.Tag = item["type"].ToString();
-                        doc.Image = Resources.openfilefolder;
+                        doc.Tag = new NodeData {
+                            type = item["type"].ToString(),
+                            NomDoc = doss,
+                            xmlPath = Path.GetDirectoryName(path) + ".xml",
+                            status = statusDoc
+                        };
+                        doc.Image = statusDoc == 3 ? Resources.folder_closed : Resources.folder_ok;
+                        doc.ToolTipText = doss;
+                        doc.ContextMenu = radContextMenu1;
                         //switch (item["type"].ToString())
                         //{
                         //    case "Achat/FOURNISSEUR":
@@ -76,17 +104,46 @@ namespace FinatechControle
                         //        doc.Image = Resources.vioFolder;
                         //        break;
                         //}
-                        
+
                         boite.Nodes.Add(doc);
                     }
                     //Boites.Nodes.Add(boite);
                     boite.Text = $"Boite {numBoite} ({Docs.Rows.Count})";
-                    boite.Image = Resources.cardfilebox;
+                    Bitmap img = Resources.boite2;
+
+                    if (Fl_oks > 0 && Fl_oks < alldocsCount)
+                    {
+                        img = Resources.boite_edit;
+                    }
+                    else if (Fl_oks == alldocsCount)
+                    {
+                        img = Resources.boite_ok;
+                    }
+                    boite.Image = img;
                     radTreeView2.Nodes.Add(boite);
                 }
 
             }
         }
+
+        private void NodeCopyName_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(((NodeData)CurrentNode.Tag).NomDoc);
+        }
+
+        private void Rescan_Click(object sender, EventArgs e)
+        {
+
+            Process.Start("explorer.exe", Path.GetDirectoryName(CurrentNode.Value.ToString()));
+
+        }
+
+        private void Openxml_Click(object sender, EventArgs e)
+        {
+            var data = (NodeData)CurrentNode.Tag;
+            Process.Start("iexplore", data.xmlPath);
+        }
+
         // Obtenir tous les documents d'une boite
         private DataTable getDocs(string numboite)
         {
@@ -95,7 +152,7 @@ namespace FinatechControle
             {
                 cnn.Open();
                 var boite = numboite == "" ? "Numboite is null" : "Numboite = '" + numboite + "'";
-                string reqdocs = "select * from DossiersIndexeV where id_status=3 and " + boite;
+                string reqdocs = "select * from DossiersIndexeV where id_status in (3,6) and " + boite;
 
                 SqlDataAdapter da = new SqlDataAdapter(reqdocs, cnn);
                 DataTable dt = new DataTable();
@@ -103,7 +160,7 @@ namespace FinatechControle
                 return dt;           
             }
         }
-        // selectioner un dossier
+        // sélectionner un dossier
         private void Node_Changed(object sender, RadTreeViewEventArgs e)
         {
             if (e.Node.Level == 1)
@@ -111,28 +168,46 @@ namespace FinatechControle
                 try
                 {
                     radPdfViewer2.LoadDocument(e.Node.Value.ToString());
+                    var CrData = (NodeData)CurrentNode.Tag;
+                    if (CrData != null)
+                    {
+                        if (CrData.image == "folder" && CrData.status == 3)
+                        {
+                            CurrentNode.Image = Resources.folder_closed;
+                            ((NodeData)CurrentNode.Tag).image = "folder_closed";
+                        }
+                        else if (CrData.image == "folder" && CrData.status == 6)
+                        {
+                            CurrentNode.Image = Resources.folder_ok;
+                            ((NodeData)CurrentNode.Tag).image = "folder_ok";
+                        }
+                    }
                     CurrentNode = e.Node;
+                    CurrentNode.Image = Resources.folder;
+                    ((NodeData)CurrentNode.Tag).image = "folder";
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
+                    return;
                 }
+
+                var nodedata = (NodeData)e.Node.Tag;
                 // Verifier le type de Document
-                var type = e.Node.Tag.ToString();
-                
+                var type = nodedata.type;
                 //  le nom du document
-                var NomDoc = radTreeView2.SelectedNode.Text.Replace("'", "''");
+                var NomDoc = nodedata.NomDoc;
                 // Pour le type Achat/FOURNISSEUR
 
                 if (type == "Achat/FOURNISSEUR")
                 {
-                    var row = getIndexs(e.Node.Text, "Achat").Rows[0];
+                    var row = getIndexs(NomDoc, "Achat").Rows[0];
                     radLabel2.Text = row["user_index"].ToString();
                     CalcTauxErr(type, row["user_index"].ToString());
                     var frniss = new Fourniss()
                     {
                         controle = this,
-                        NomDoc = NomDoc,
+                        NomDoc = NomDoc.Replace("'", "''"),
                         id_user_control = id_user_control,
                         Fournisseur = row["Fournisseur"].ToString(),
                         DateFacture = row["DateFacture"].ToString(),
@@ -155,13 +230,13 @@ namespace FinatechControle
                 // Pour le type Vente/Client
                 else if (type == "Vente/Client")
                 {
-                    var row = getIndexs(e.Node.Text, "Vente").Rows[0];
+                    var row = getIndexs(NomDoc, "Vente").Rows[0];
                     radLabel2.Text = row["user_index"].ToString();
                     CalcTauxErr(type, row["user_index"].ToString());
                     var client = new Cl()
                     {
                         controle = this,
-                        NomDoc = NomDoc,
+                        NomDoc = NomDoc.Replace("'", "''"),
                         id_user_control = id_user_control,
                         Client = row["Client"].ToString(),
                         DateFacture = row["DateFacture"].ToString(),
@@ -183,13 +258,13 @@ namespace FinatechControle
                 // Pour le type BANQUES
                 else if (type == "BANQUES")
                 {
-                    var row = getIndexs(e.Node.Text, "banque").Rows[0];
+                    var row = getIndexs(NomDoc, "banque").Rows[0];
                     radLabel2.Text = row["user_index"].ToString();
                     CalcTauxErr(type, row["user_index"].ToString());
                     var banque = new Banque()
                     {
                         controle = this,
-                        NomDoc = NomDoc,
+                        NomDoc = NomDoc.Replace("'", "''"),
                         id_user_control = id_user_control,
                         NumOP = row["NumOP"].ToString(),
                         NumSerieCheque = row["NumSerieCheque"].ToString(),
@@ -212,20 +287,20 @@ namespace FinatechControle
                 // Pour le type CAISSE
                 else if (type == "CAISSES")
                 {
-                    var row = getIndexs(e.Node.Text, "Caisse").Rows[0];
+                    var row = getIndexs(NomDoc, "Caisse").Rows[0];
                     radLabel2.Text = row["user_index"].ToString();
                     CalcTauxErr(type, row["user_index"].ToString());
                     var caisse = new Caisse()
                     {
                         controle = this,
-                        NomDoc = NomDoc,
+                        NomDoc = NomDoc.Replace("'", "''"),
                         id_user_control = id_user_control,
                         DatePiece = row["DatePiece"].ToString(),
                         NumProjet = row["NumProjet"].ToString(),
                         BU = row["BU"].ToString(),
                         NumBoite = row["NumBoite"].ToString(),
                         Salarie = row["salarie"].ToString(),
-                        NumImmatricule = row["NumDImatricul"].ToString(),
+                        NumDImatricul = row["NumDImatricul"].ToString(),
                         Reference = row["reference"].ToString(),
                     };
                     foreach (Control item in splitPanel3.Controls)
@@ -250,6 +325,7 @@ namespace FinatechControle
                 string reqdocs = $"select * from {table} where NomDossier = '{nomDoss.Replace("'","''")}'";
 
                 SqlDataAdapter da = new SqlDataAdapter(reqdocs, cnn);
+                
                 DataTable dt = new DataTable();
                 da.Fill(dt);
                 return dt;
@@ -261,22 +337,35 @@ namespace FinatechControle
 
         }
 
-        public void DelDocFromTreeView()
+        public void UpdateTreeView()
         {
+            CurrentNode.Image = Resources.folder_ok;
+            ((NodeData)CurrentNode.Tag).image = "folder_ok";
+            ((NodeData)CurrentNode.Tag).status = 6;
             var docControle = CurrentNode;
             var parent = docControle.Parent;
+            
             if (radTreeView2.SelectedNode.NextNode != null)
             {
                 radTreeView2.SelectedNode = docControle.NextNode;
-            }
-            else
-            {
-                radTreeView2.SelectedNode = parent;
-            }
-            parent.Nodes.Remove(docControle);
-            if (radTreeView2.SelectedNode == parent)
-            {
-                radTreeView2.Nodes.Remove(parent);
+                var allnodes = parent.Nodes.Count;
+                var nodeok = 0;
+                foreach (var item in parent.Nodes)
+                {
+                    if(((NodeData)item.Tag).status == 6)
+                    {
+                        nodeok++;
+                    }
+                }
+                if (nodeok > 0 && nodeok < allnodes)
+                {
+                    parent.Image = Resources.boite_edit;
+                }
+                else if (nodeok == allnodes)
+                {
+                    parent.Image = Resources.boite_ok;
+                    parent.Collapse();
+                }
             }
         }
 
@@ -285,10 +374,10 @@ namespace FinatechControle
             Application.Exit();
         }
 
-        private void CalcTauxErr(string type, string user_index)
+        public void CalcTauxErr(string type, string user_index)
         {
             var req = $"SELECT  "
-                    + $"count(nom_document) * 100 / (select Count(*) FROM DossiersIndexeV WHERE user_index = '{user_index}' and Type = '{type}') "
+                    + $"ROUND(cast(count(DISTINCT nom_document) * 100 as FLOAT) / cast((select Count(*) FROM DossiersIndexeV WHERE user_index = '{user_index}' and Type = '{type}') as FLOAT),2)"
                     + $" FROM Modifications"
                     + $" WHERE user_index = '{user_index}'"
                     + $" and type_projet = '{type}'";
@@ -296,9 +385,10 @@ namespace FinatechControle
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
-                int tauxType = (int)new SqlCommand(req, cnn).ExecuteScalar();
-                TxLabel.Text = $"{tauxType} %";
+                var tauxType = new SqlCommand(req, cnn).ExecuteScalar().ToString();
+                TxLabel.Text = $"{tauxType}%";
             }
         }
+
     }
 }

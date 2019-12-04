@@ -13,14 +13,14 @@ namespace FinatechControle
         public Controle controle;
         public string NomDoc;
         public string id_user_control;
-        public string NumBoite;
+        public string NumBoite { get; set; }
         public string type = "Achat/FOURNISSEUR";
-        public string Fournisseur;
-        public string DateFacture;
-        public string Reference;
-        public string NumProjet;
-        public string NumBonCommande;
-        public string BU;
+        public string Fournisseur { get; set; }
+        public string DateFacture { get; set; }
+        public string Reference { get; set; }
+        public string NumProjet { get; set; }
+        public string NumBonCommande { get; set; }
+        public string BU { get; set; }
 
         public Fourniss()
         {
@@ -57,20 +57,23 @@ namespace FinatechControle
             {
                 if (item.Value == "")
                 {
-                    allgood = false;
                     switch (item.Key)
                     {
                         case "Fournisseur":
                             errorProvider1.SetError(TBFournisseur, errmsg);
+                            allgood = false;
                             break;
                         case "DateFacture":
                             errorProvider1.SetError(TBDateFacture, errmsg);
+                            allgood = false;
                             break;
                         case "NumBoite":
                             errorProvider1.SetError(TBNumBoite, errmsg);
+                            allgood = false;
                             break;
                         case "Reference":
                             errorProvider1.SetError(TBReference, errmsg);
+                            allgood = false;
                             break;
                     }
                 }
@@ -82,26 +85,28 @@ namespace FinatechControle
                 return;
             }
 
+
             //verifier les chagements des colonnes
-            ColumnModified.VerifyChanges(Fourn_Values, this);
+            Helper.VerifyChanges(Fourn_Values, this);
 
             Fourn_Values["NumBonCommande"] = string.IsNullOrWhiteSpace(TBNumBonCom.Text) ? "null" : TBNumBonCom.Text;
             Fourn_Values["NumBoite"] = TBNumBoite.Text == "" ? "0" : TBNumBoite.Text;
+
+            Helper.CheckForQuote(ref Fourn_Values);
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
 
                 // update vente set [Client]= ,[DateFacture]= ,[Numfacture]= ,[NumProjet]= ,[BU]= ,[Numboite]= where [NomDossier]=
-                var req = $"UPDATE achat SET  [Fournisseur]='{Fourn_Values["Fournisseur"]}' ,[DateFacture]='{Fourn_Values["DateFact"]}' ,[Reference]='{Fourn_Values["Reference"]}' ,[NumBonCommande]={Fourn_Values["NumBonCommande"]}, [NumProjet]='{Fourn_Values["NumProjet"]}',[BU]='{Fourn_Values["BU"]}' ,[NumBoite]='{Fourn_Values["NumBoite"]}' ,[id_status]=6 ,[id_user_control]={id_user_control},date_control=GETDATE() WHERE [NomDossier]='{NomDoc}' " +
-                    $"UPDATE FinaTech_Test.dbo.DossiersIndexes SET id_status=6 WHERE NomDossier='{NomDoc}'";
+                var req = $"UPDATE achat SET  [Fournisseur]='{Fourn_Values["Fournisseur"]}' ,[DateFacture]='{Fourn_Values["DateFacture"]}' ,[Reference]='{Fourn_Values["Reference"]}' ,[NumBonCommande]={Fourn_Values["NumBonCommande"]}, [NumProjet]='{Fourn_Values["NumProjet"]}',[BU]='{Fourn_Values["BU"]}' ,[NumBoite]='{Fourn_Values["NumBoite"]}' ,[id_status]=6 ,[id_user_control]={id_user_control},date_control=GETDATE() WHERE [NomDossier]='{NomDoc}' ";
 
                 var cmd = new SqlCommand(req, cnn);
                 cmd.ExecuteNonQuery();
                 //MessageBox.Show("Opération effectué!!");
             }
             // supprimer le document dans le treeView
-            controle.DelDocFromTreeView();
+            controle.UpdateTreeView();
         }
 
         private void TB_Validating(object sender, System.ComponentModel.CancelEventArgs e)

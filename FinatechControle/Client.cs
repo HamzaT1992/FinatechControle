@@ -12,13 +12,13 @@ namespace FinatechControle
         public Controle controle;
         public string NomDoc;
         public string id_user_control;
-        public string NumBoite;
+        public string NumBoite { get; set; }
         public string type = "Vente/Client";
-        public string Client;
-        public string DateFacture;
-        public string Numfacture;
-        public string NumProjet;
-        public string BU;
+        public string Client { get; set; }
+        public string DateFacture { get; set; }
+        public string Numfacture { get; set; }
+        public string NumProjet { get; set; }
+        public string BU { get; set; }
 
         public Cl()
         {
@@ -54,20 +54,24 @@ namespace FinatechControle
             {
                 if (item.Value == "")
                 {
-                    allgood = false;
+                    
                     switch (item.Key)
                     {
                         case "Client":
                             errorProvider1.SetError(TBClient, errmsg);
+                            allgood = false;
                             break;
                         case "DateFacture":
                             errorProvider1.SetError(TBDateFacture, errmsg);
+                            allgood = false;
                             break;
                         case "Numfacture":
                             errorProvider1.SetError(TBNFacture, errmsg);
+                            allgood = false;
                             break;
                         case "NumBoite":
                             errorProvider1.SetError(TBNumBoite, errmsg);
+                            allgood = false;
                             break;
                     }
                 }
@@ -80,13 +84,13 @@ namespace FinatechControle
             }
 
             //verifier les chagements des colonnes
-            ColumnModified.VerifyChanges(cl_Values, this);
+            Helper.VerifyChanges(cl_Values, this);
 
             cl_Values["NumBoite"] = string.IsNullOrWhiteSpace(TBNumBoite.Text) ? "0" : TBNumBoite.Text;
 
+            Helper.CheckForQuote(ref cl_Values);
             // update vente set [Client]= ,[DateFacture]= ,[Numfacture]= ,[NumProjet]= ,[BU]= ,[Numboite]= where [NomDossier]=
-            var req = $"UPDATE vente SET [Client]='{cl_Values["Client"]}' ,[DateFacture]='{cl_Values["DateFacture"]}' ,[Numfacture]='{cl_Values["Numfacture"]}' ,[NumProjet]='{cl_Values["NumProjet"]}' ,[BU]='{cl_Values["BU"]}' ,[NumBoite]='{cl_Values["NumBoite"]}',id_status=6,id_user_control='{id_user_control}',date_control=GETDATE() WHERE [NomDossier]='{NomDoc}' " +
-                        $"UPDATE FinaTech_Test.dbo.DossiersIndexes SET id_status=6 WHERE NomDossier='{NomDoc}'";
+            var req = $"UPDATE vente SET [Client]='{cl_Values["Client"]}' ,[DateFacture]='{cl_Values["DateFacture"]}' ,[Numfacture]='{cl_Values["Numfacture"]}' ,[NumProjet]='{cl_Values["NumProjet"]}' ,[BU]='{cl_Values["BU"]}' ,[NumBoite]='{cl_Values["NumBoite"]}',id_status=6,id_user_control='{id_user_control}',date_control=GETDATE() WHERE [NomDossier]='{NomDoc}' ";
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
 
             using (SqlConnection cnn = new SqlConnection(constr))
@@ -97,7 +101,7 @@ namespace FinatechControle
                 //MessageBox.Show("Opération effectué!!");
             }
             // supprimer le document dans le treeView
-            controle.DelDocFromTreeView();
+            controle.UpdateTreeView();
         }
 
         private void TB_Validating(object sender, System.ComponentModel.CancelEventArgs e)

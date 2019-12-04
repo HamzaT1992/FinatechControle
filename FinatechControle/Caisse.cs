@@ -12,14 +12,14 @@ namespace FinatechControle
         public Controle controle;
         public string NomDoc;
         public string id_user_control;
-        public string NumBoite;
+        public string NumBoite { get; set; }
         public string type = "CAISSES";
-        public string NumImmatricule;
-        public string DatePiece;
-        public string Salarie;
-        public string Reference;
-        public string BU;
-        public string NumProjet;
+        public string NumDImatricul { get; set; }
+        public string DatePiece { get; set; }
+        public string Salarie { get; set; }
+        public string Reference { get; set; }
+        public string BU { get; set; }
+        public string NumProjet { get; set; }
 
         public Caisse()
         {
@@ -32,7 +32,7 @@ namespace FinatechControle
             TBBU.Text = BU;
             TBNProjet.Text = NumProjet;
             TBNumBoite.Text = NumBoite;
-            TBNumImm.Text = NumImmatricule;
+            TBNumImm.Text = NumDImatricul;
             TBSalarie.Text = Salarie;
             TBReference.Text = Reference;
         }
@@ -41,12 +41,12 @@ namespace FinatechControle
         {
             Dictionary<string, string> cs_Values = new Dictionary<string, string>()
             {
-                {"Date", TBDatePiece.Text},
+                {"DatePiece", TBDatePiece.Text},
                 {"NumProjet", TBNProjet.Text},
                 {"BU", TBBU.Text},
                 {"Reference", TBReference.Text},
                 {"NumDImatricul", TBNumImm.Text},
-                {"Salary", TBSalarie.Text},
+                {"Salarie", TBSalarie.Text},
                 {"NumBoite", TBNumBoite.Text},
             };
 
@@ -58,23 +58,28 @@ namespace FinatechControle
             {
                 if (string.IsNullOrWhiteSpace(item.Value))
                 {
-                    allgood = false;
+                    
                     switch (item.Key)
                     {
-                        case "Date":
+                        case "DatePiece":
                             errorProvider1.SetError(TBDatePiece, errmsg);
+                            allgood = false;
                             break;
                         case "NumProjet":
                             errorProvider1.SetError(TBNProjet, errmsg);
+                            allgood = false;
                             break;
                         case "NumDImatricul":
                             errorProvider1.SetError(TBNumImm, errmsg);
+                            allgood = false;
                             break;
-                        case "Salary":
+                        case "Salarie":
                             errorProvider1.SetError(TBSalarie, errmsg);
+                            allgood = false;
                             break;
                         case "NumBoite":
                             errorProvider1.SetError(TBNumBoite, errmsg);
+                            allgood = false;
                             break;
                     }
                 }
@@ -87,13 +92,12 @@ namespace FinatechControle
             }
 
             //verifier les chagements des colonnes
-            ColumnModified.VerifyChanges(cs_Values, this);
+            Helper.VerifyChanges(cs_Values, this);
 
             cs_Values["NumBoite"] = string.IsNullOrWhiteSpace(TBNumBoite.Text) ? "0" : TBNumBoite.Text;
-
+            Helper.CheckForQuote(ref cs_Values);
             // Enregistrer les modifications
-            var req = $"update Caisse set [DatePiece]='{cs_Values["DatePiece"]}' ,[NumProjet]='{cs_Values["NumProjet"]}' ,[BU]='{cs_Values["BU"]}' ,[NumBoite]='{cs_Values["NumBoite"]}',Reference='{cs_Values["Reference"]}',NumDImatricul='{cs_Values["NumDImatricul"]}',Salarie='{cs_Values["Salarie"]}',id_status=6,id_user_control={id_user_control},date_control=GETDATE() WHERE [NomDossier]='{NomDoc}' " +
-                $"UPDATE FinaTech_Test.dbo.DossiersIndexes SET id_status=6 WHERE NomDossier='{NomDoc}'";
+            var req = $"update Caisse set [DatePiece]='{cs_Values["DatePiece"]}' ,[NumProjet]='{cs_Values["NumProjet"]}' ,[BU]='{cs_Values["BU"]}' ,[NumBoite]='{cs_Values["NumBoite"]}',Reference='{cs_Values["Reference"]}',NumDImatricul='{cs_Values["NumDImatricul"]}',Salarie='{cs_Values["Salarie"]}',id_status=6,id_user_control={id_user_control},date_control=GETDATE() WHERE [NomDossier]='{NomDoc}' ";
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
             using (SqlConnection cnn = new SqlConnection(constr))
             {
@@ -103,7 +107,7 @@ namespace FinatechControle
                 //MessageBox.Show("Opération effectué!!");
             }
             // supprimer le document dans le treeView
-            controle.DelDocFromTreeView();
+            controle.UpdateTreeView();
         }
 
         private void TB_Validating(object sender, System.ComponentModel.CancelEventArgs e)

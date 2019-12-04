@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.radTreeView2 = new Telerik.WinControls.UI.RadTreeView();
             this.radPdfViewerNavigator1 = new Telerik.WinControls.UI.RadPdfViewerNavigator();
+            this.radPdfViewer2 = new Telerik.WinControls.UI.RadPdfViewer();
             this.radSplitContainer1 = new Telerik.WinControls.UI.RadSplitContainer();
             this.splitPanel1 = new Telerik.WinControls.UI.SplitPanel();
             this.radPanel5 = new Telerik.WinControls.UI.RadPanel();
@@ -38,17 +40,22 @@
             this.radLabel4 = new Telerik.WinControls.UI.RadLabel();
             this.splitPanel2 = new Telerik.WinControls.UI.SplitPanel();
             this.radPanel6 = new Telerik.WinControls.UI.RadPanel();
-            this.radPdfViewer2 = new Telerik.WinControls.UI.RadPdfViewer();
             this.radPanel1 = new Telerik.WinControls.UI.RadPanel();
             this.splitPanel3 = new Telerik.WinControls.UI.SplitPanel();
             this.radPanel3 = new Telerik.WinControls.UI.RadPanel();
+            this.TxLabel = new Telerik.WinControls.UI.RadLabel();
+            this.TxTitleLabel = new Telerik.WinControls.UI.RadLabel();
             this.radLabel2 = new Telerik.WinControls.UI.RadLabel();
             this.radLabel1 = new Telerik.WinControls.UI.RadLabel();
             this.radPanel4 = new Telerik.WinControls.UI.RadPanel();
-            this.TxTitleLabel = new Telerik.WinControls.UI.RadLabel();
-            this.TxLabel = new Telerik.WinControls.UI.RadLabel();
+            this.radContextMenu1 = new Telerik.WinControls.UI.RadContextMenu(this.components);
+            this.openxml = new Telerik.WinControls.UI.RadMenuItem();
+            this.rescan = new Telerik.WinControls.UI.RadMenuItem();
+            this.radContextMenuManager1 = new Telerik.WinControls.UI.RadContextMenuManager();
+            this.nodeCopyName = new Telerik.WinControls.UI.RadMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.radTreeView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPdfViewerNavigator1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radPdfViewer2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSplitContainer1)).BeginInit();
             this.radSplitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitPanel1)).BeginInit();
@@ -63,41 +70,51 @@
             this.splitPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radPanel6)).BeginInit();
             this.radPanel6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radPdfViewer2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPanel1)).BeginInit();
             this.radPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitPanel3)).BeginInit();
             this.splitPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radPanel3)).BeginInit();
             this.radPanel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TxLabel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TxTitleLabel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPanel4)).BeginInit();
             this.radPanel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.TxTitleLabel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TxLabel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
             // radTreeView2
             // 
-            this.radTreeView2.AllowDefaultContextMenu = true;
             this.radTreeView2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radTreeView2.Location = new System.Drawing.Point(0, 0);
             this.radTreeView2.Name = "radTreeView2";
-            this.radTreeView2.Size = new System.Drawing.Size(233, 634);
+            this.radTreeView2.ShowNodeToolTips = true;
+            this.radTreeView2.Size = new System.Drawing.Size(233, 760);
             this.radTreeView2.SpacingBetweenNodes = -1;
             this.radTreeView2.TabIndex = 0;
             this.radTreeView2.ThemeName = "ControlDefault";
             // 
             // radPdfViewerNavigator1
             // 
+            this.radPdfViewerNavigator1.AssociatedViewer = this.radPdfViewer2;
             this.radPdfViewerNavigator1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radPdfViewerNavigator1.Location = new System.Drawing.Point(0, 0);
             this.radPdfViewerNavigator1.Name = "radPdfViewerNavigator1";
             this.radPdfViewerNavigator1.Size = new System.Drawing.Size(791, 39);
             this.radPdfViewerNavigator1.TabIndex = 17;
             this.radPdfViewerNavigator1.ThemeName = "ControlDefault";
+            // 
+            // radPdfViewer2
+            // 
+            this.radPdfViewer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.radPdfViewer2.Location = new System.Drawing.Point(0, 0);
+            this.radPdfViewer2.Name = "radPdfViewer2";
+            this.radPdfViewer2.Size = new System.Drawing.Size(791, 760);
+            this.radPdfViewer2.TabIndex = 0;
+            this.radPdfViewer2.ThemeName = "ControlDefault";
+            this.radPdfViewer2.ThumbnailsScaleFactor = 0.15F;
             // 
             // radSplitContainer1
             // 
@@ -111,7 +128,7 @@
             // 
             // 
             this.radSplitContainer1.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.radSplitContainer1.Size = new System.Drawing.Size(1290, 673);
+            this.radSplitContainer1.Size = new System.Drawing.Size(1290, 799);
             this.radSplitContainer1.TabIndex = 20;
             this.radSplitContainer1.TabStop = false;
             // 
@@ -125,7 +142,7 @@
             // 
             // 
             this.splitPanel1.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.splitPanel1.Size = new System.Drawing.Size(233, 673);
+            this.splitPanel1.Size = new System.Drawing.Size(233, 799);
             this.splitPanel1.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(-0.1518692F, 0F);
             this.splitPanel1.SizeInfo.SplitterCorrection = new System.Drawing.Size(-158, 0);
             this.splitPanel1.TabIndex = 0;
@@ -138,7 +155,7 @@
             this.radPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radPanel5.Location = new System.Drawing.Point(0, 39);
             this.radPanel5.Name = "radPanel5";
-            this.radPanel5.Size = new System.Drawing.Size(233, 634);
+            this.radPanel5.Size = new System.Drawing.Size(233, 760);
             this.radPanel5.TabIndex = 0;
             this.radPanel5.Text = "radPanel5";
             // 
@@ -177,7 +194,7 @@
             // 
             // 
             this.splitPanel2.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.splitPanel2.Size = new System.Drawing.Size(791, 673);
+            this.splitPanel2.Size = new System.Drawing.Size(791, 799);
             this.splitPanel2.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(0.2834891F, 0F);
             this.splitPanel2.SizeInfo.SplitterCorrection = new System.Drawing.Size(292, 0);
             this.splitPanel2.TabIndex = 1;
@@ -190,19 +207,9 @@
             this.radPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radPanel6.Location = new System.Drawing.Point(0, 39);
             this.radPanel6.Name = "radPanel6";
-            this.radPanel6.Size = new System.Drawing.Size(791, 634);
+            this.radPanel6.Size = new System.Drawing.Size(791, 760);
             this.radPanel6.TabIndex = 0;
             this.radPanel6.Text = "radPanel6";
-            // 
-            // radPdfViewer2
-            // 
-            this.radPdfViewer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radPdfViewer2.Location = new System.Drawing.Point(0, 0);
-            this.radPdfViewer2.Name = "radPdfViewer2";
-            this.radPdfViewer2.Size = new System.Drawing.Size(791, 634);
-            this.radPdfViewer2.TabIndex = 0;
-            this.radPdfViewer2.ThemeName = "ControlDefault";
-            this.radPdfViewer2.ThumbnailsScaleFactor = 0.15F;
             // 
             // radPanel1
             // 
@@ -223,7 +230,7 @@
             // 
             // 
             this.splitPanel3.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.splitPanel3.Size = new System.Drawing.Size(258, 673);
+            this.splitPanel3.Size = new System.Drawing.Size(258, 799);
             this.splitPanel3.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(-0.1316199F, 0F);
             this.splitPanel3.SizeInfo.SplitterCorrection = new System.Drawing.Size(-134, 0);
             this.splitPanel3.TabIndex = 2;
@@ -240,6 +247,21 @@
             this.radPanel3.Name = "radPanel3";
             this.radPanel3.Size = new System.Drawing.Size(258, 59);
             this.radPanel3.TabIndex = 21;
+            // 
+            // TxLabel
+            // 
+            this.TxLabel.Location = new System.Drawing.Point(116, 35);
+            this.TxLabel.Name = "TxLabel";
+            this.TxLabel.Size = new System.Drawing.Size(2, 2);
+            this.TxLabel.TabIndex = 1;
+            // 
+            // TxTitleLabel
+            // 
+            this.TxTitleLabel.Location = new System.Drawing.Point(8, 35);
+            this.TxTitleLabel.Name = "TxTitleLabel";
+            this.TxTitleLabel.Size = new System.Drawing.Size(84, 17);
+            this.TxTitleLabel.TabIndex = 1;
+            this.TxTitleLabel.Text = "<html><strong>Taux d\'erreur : </strong></html>";
             // 
             // radLabel2
             // 
@@ -262,31 +284,43 @@
             this.radPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radPanel4.Location = new System.Drawing.Point(0, 0);
             this.radPanel4.Name = "radPanel4";
-            this.radPanel4.Size = new System.Drawing.Size(1290, 673);
+            this.radPanel4.Size = new System.Drawing.Size(1290, 799);
             this.radPanel4.TabIndex = 0;
             this.radPanel4.Text = "radPanel4";
             // 
-            // TxTitleLabel
+            // radContextMenu1
             // 
-            this.TxTitleLabel.Location = new System.Drawing.Point(8, 35);
-            this.TxTitleLabel.Name = "TxTitleLabel";
-            this.TxTitleLabel.Size = new System.Drawing.Size(84, 17);
-            this.TxTitleLabel.TabIndex = 1;
-            this.TxTitleLabel.Text = "<html><strong>Taux d\'erreur : </strong></html>";
+            this.radContextMenu1.Items.AddRange(new Telerik.WinControls.RadItem[] {
+            this.openxml,
+            this.rescan,
+            this.nodeCopyName});
+            this.radContextMenu1.ThemeName = "ControlDefault";
             // 
-            // TxLabel
+            // openxml
             // 
-            this.TxLabel.Location = new System.Drawing.Point(116, 35);
-            this.TxLabel.Name = "TxLabel";
-            this.TxLabel.Size = new System.Drawing.Size(2, 2);
-            this.TxLabel.TabIndex = 1;
+            this.openxml.Name = "openxml";
+            this.openxml.Text = "Ouvrir le xml";
+            this.openxml.ToolTipText = "Ovrir le ficher xml du document";
+            // 
+            // rescan
+            // 
+            this.rescan.Name = "rescan";
+            this.rescan.Text = "Rescanner";
+            this.rescan.ToolTipText = "Ouvrir le chemin du ficher pdf pour le remplacer d\'un nouveau";
+            // 
+            // nodeCopyName
+            // 
+            this.nodeCopyName.Name = "nodeCopyName";
+            this.nodeCopyName.Text = "Copier";
+            this.nodeCopyName.ToolTipText = "Copier le nom du dossier";
             // 
             // Controle
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1290, 673);
+            this.ClientSize = new System.Drawing.Size(1290, 799);
             this.Controls.Add(this.radPanel4);
+            this.MinimumSize = new System.Drawing.Size(1298, 829);
             this.Name = "Controle";
             // 
             // 
@@ -299,6 +333,7 @@
             this.Load += new System.EventHandler(this.RadForm1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.radTreeView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPdfViewerNavigator1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radPdfViewer2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSplitContainer1)).EndInit();
             this.radSplitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitPanel1)).EndInit();
@@ -314,7 +349,6 @@
             this.splitPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.radPanel6)).EndInit();
             this.radPanel6.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.radPdfViewer2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPanel1)).EndInit();
             this.radPanel1.ResumeLayout(false);
             this.radPanel1.PerformLayout();
@@ -323,12 +357,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.radPanel3)).EndInit();
             this.radPanel3.ResumeLayout(false);
             this.radPanel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TxLabel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TxTitleLabel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPanel4)).EndInit();
             this.radPanel4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.TxTitleLabel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TxLabel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
@@ -356,5 +390,10 @@
         public Telerik.WinControls.UI.RadLabel radLabel2;
         private Telerik.WinControls.UI.RadLabel TxLabel;
         private Telerik.WinControls.UI.RadLabel TxTitleLabel;
+        private Telerik.WinControls.UI.RadContextMenu radContextMenu1;
+        private Telerik.WinControls.UI.RadMenuItem openxml;
+        private Telerik.WinControls.UI.RadMenuItem rescan;
+        private Telerik.WinControls.UI.RadContextMenuManager radContextMenuManager1;
+        private Telerik.WinControls.UI.RadMenuItem nodeCopyName;
     }
 }

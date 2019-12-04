@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace FinatechControle
 {
-    public class ColumnModified
+    public class Helper
     {
         private static void AddModificaiton(string Column,UserControl control)
         {
@@ -29,10 +29,11 @@ namespace FinatechControle
             {
                 cnn.Open();
 
-                var mdreq = $"INSERT INTO Modifications VALUES ('$Col','{NomDoc}','{type}','{userInsex}',{id_user_control},GETDATE())";
+                var mdreq = $"INSERT INTO Modifications VALUES ('{Column}','{NomDoc}','{type}','{userInsex}',{id_user_control},GETDATE())";
 
                 var cmd = new SqlCommand(mdreq, cnn);
                 cmd.ExecuteNonQuery();
+                //cnt.controle.CalcTauxErr(type,userInsex);
                 //MessageBox.Show("Opération effectué!!");
             }
         }
@@ -48,6 +49,14 @@ namespace FinatechControle
                 {
                     AddModificaiton(pName, cnt);
                 }
+            }
+        }
+
+        public static void CheckForQuote(ref Dictionary<string, string> keyValues)
+        {
+            foreach (var key in keyValues.Keys.ToList())
+            {
+                keyValues[key] = keyValues[key].Replace("'", "''");
             }
         }
     }

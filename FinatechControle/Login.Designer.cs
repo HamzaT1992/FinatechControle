@@ -110,6 +110,7 @@
             // 
             // cancelButton
             // 
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Location = new System.Drawing.Point(41, 151);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(110, 24);
@@ -117,10 +118,12 @@
             this.cancelButton.Text = "Annuler";
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
-            // ShapedForm1
+            // Login
             // 
+            this.AcceptButton = this.cnxButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(353, 206);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.cnxButton);
@@ -129,7 +132,7 @@
             this.Controls.Add(this.loginTBox);
             this.Controls.Add(this.radLabel1);
             this.Controls.Add(this.radTitleBar1);
-            this.Name = "ShapedForm1";
+            this.Name = "Login";
             this.Shape = this.roundRectShapeForm;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Connexion";

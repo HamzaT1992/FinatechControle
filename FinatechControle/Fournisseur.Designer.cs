@@ -252,7 +252,7 @@
             this.errorProvider2.ContainerControl = this;
             this.errorProvider2.Icon = ((System.Drawing.Icon)(resources.GetObject("errorProvider2.Icon")));
             // 
-            // Fournisseur
+            // Fourniss
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -272,7 +272,7 @@
             this.Controls.Add(this.TBDateFacture);
             this.Controls.Add(this.TBReference);
             this.Controls.Add(this.title);
-            this.Name = "Fournisseur";
+            this.Name = "Fourniss";
             this.Size = new System.Drawing.Size(280, 622);
             this.Load += new System.EventHandler(this.Fournisseur_Load);
             ((System.ComponentModel.ISupportInitialize)(this.fournisseurLabel)).EndInit();
