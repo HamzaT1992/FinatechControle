@@ -344,28 +344,25 @@ namespace FinatechControle
             ((NodeData)CurrentNode.Tag).status = 6;
             var docControle = CurrentNode;
             var parent = docControle.Parent;
-            
-            if (radTreeView2.SelectedNode.NextNode != null)
+
+            radTreeView2.SelectedNode = docControle.NextNode??CurrentNode;
+            var allnodes = parent.Nodes.Count;
+            var nodeok = 0;
+            foreach (var item in parent.Nodes)
             {
-                radTreeView2.SelectedNode = docControle.NextNode;
-                var allnodes = parent.Nodes.Count;
-                var nodeok = 0;
-                foreach (var item in parent.Nodes)
+                if (((NodeData)item.Tag).status == 6)
                 {
-                    if(((NodeData)item.Tag).status == 6)
-                    {
-                        nodeok++;
-                    }
+                    nodeok++;
                 }
-                if (nodeok > 0 && nodeok < allnodes)
-                {
-                    parent.Image = Resources.boite_edit;
-                }
-                else if (nodeok == allnodes)
-                {
-                    parent.Image = Resources.boite_ok;
-                    parent.Collapse();
-                }
+            }
+            if (nodeok > 0 && nodeok < allnodes)
+            {
+                parent.Image = Resources.boite_edit;
+            }
+            else if (nodeok == allnodes)
+            {
+                parent.Image = Resources.boite_ok;
+                parent.Collapse();
             }
         }
 
