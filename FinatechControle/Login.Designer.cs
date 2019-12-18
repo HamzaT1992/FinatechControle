@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            Telerik.WinControls.UI.RadListDataItem radListDataItem1 = new Telerik.WinControls.UI.RadListDataItem();
+            Telerik.WinControls.UI.RadListDataItem radListDataItem2 = new Telerik.WinControls.UI.RadListDataItem();
             this.radTitleBar1 = new Telerik.WinControls.UI.RadTitleBar();
             this.roundRectShapeTitle = new Telerik.WinControls.RoundRectShape(this.components);
             this.roundRectShapeForm = new Telerik.WinControls.RoundRectShape(this.components);
@@ -38,6 +40,8 @@
             this.passTBox = new Telerik.WinControls.UI.RadTextBox();
             this.cnxButton = new Telerik.WinControls.UI.RadButton();
             this.cancelButton = new Telerik.WinControls.UI.RadButton();
+            this.radDropDownList1 = new Telerik.WinControls.UI.RadDropDownList();
+            this.radLabel3 = new Telerik.WinControls.UI.RadLabel();
             ((System.ComponentModel.ISupportInitialize)(this.radTitleBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.loginTBox)).BeginInit();
@@ -45,6 +49,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.passTBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cnxButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cancelButton)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radDropDownList1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).BeginInit();
             this.SuspendLayout();
             // 
             // radTitleBar1
@@ -67,6 +73,11 @@
             // 
             this.roundRectShapeTitle.BottomLeftRounded = false;
             this.roundRectShapeTitle.BottomRightRounded = false;
+            this.roundRectShapeTitle.IsRightToLeft = false;
+            // 
+            // roundRectShapeForm
+            // 
+            this.roundRectShapeForm.IsRightToLeft = false;
             // 
             // radLabel1
             // 
@@ -101,22 +112,41 @@
             // 
             // cnxButton
             // 
-            this.cnxButton.Location = new System.Drawing.Point(201, 151);
+            this.cnxButton.Location = new System.Drawing.Point(201, 198);
             this.cnxButton.Name = "cnxButton";
             this.cnxButton.Size = new System.Drawing.Size(110, 24);
-            this.cnxButton.TabIndex = 3;
+            this.cnxButton.TabIndex = 4;
             this.cnxButton.Text = "Connexion";
             this.cnxButton.Click += new System.EventHandler(this.cnxButton_Click);
             // 
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(41, 151);
+            this.cancelButton.Location = new System.Drawing.Point(41, 198);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(110, 24);
-            this.cancelButton.TabIndex = 4;
+            this.cancelButton.TabIndex = 5;
             this.cancelButton.Text = "Annuler";
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            // 
+            // radDropDownList1
+            // 
+            radListDataItem1.Text = "Indexations";
+            radListDataItem2.Text = "Rejets";
+            this.radDropDownList1.Items.Add(radListDataItem1);
+            this.radDropDownList1.Items.Add(radListDataItem2);
+            this.radDropDownList1.Location = new System.Drawing.Point(134, 140);
+            this.radDropDownList1.Name = "radDropDownList1";
+            this.radDropDownList1.Size = new System.Drawing.Size(177, 20);
+            this.radDropDownList1.TabIndex = 3;
+            // 
+            // radLabel3
+            // 
+            this.radLabel3.Location = new System.Drawing.Point(41, 140);
+            this.radLabel3.Name = "radLabel3";
+            this.radLabel3.Size = new System.Drawing.Size(62, 18);
+            this.radLabel3.TabIndex = 0;
+            this.radLabel3.Text = "Opération :";
             // 
             // Login
             // 
@@ -124,10 +154,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(353, 206);
+            this.ClientSize = new System.Drawing.Size(353, 250);
+            this.Controls.Add(this.radDropDownList1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.cnxButton);
             this.Controls.Add(this.passTBox);
+            this.Controls.Add(this.radLabel3);
             this.Controls.Add(this.radLabel2);
             this.Controls.Add(this.loginTBox);
             this.Controls.Add(this.radLabel1);
@@ -144,6 +176,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.passTBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cnxButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cancelButton)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radDropDownList1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -160,5 +194,7 @@
         private Telerik.WinControls.UI.RadTextBox passTBox;
         private Telerik.WinControls.UI.RadButton cnxButton;
         private Telerik.WinControls.UI.RadButton cancelButton;
+        private Telerik.WinControls.UI.RadDropDownList radDropDownList1;
+        private Telerik.WinControls.UI.RadLabel radLabel3;
     }
 }

@@ -25,6 +25,7 @@ namespace FinatechControle
 
         private void cnxButton_Click(object sender, EventArgs e)
         {
+            var id_user = "";
             var constr = ConfigurationManager.ConnectionStrings["StrConCX"].ConnectionString;
             var login = loginTBox.Text;
             var pass = passTBox.Text;
@@ -44,16 +45,27 @@ namespace FinatechControle
                     return;
                 }
                 var row = dt.Rows[0];
-                var id_user = row["id_user"].ToString();
+                id_user = row["id_user"].ToString();
                 var id_equipe = row["id_equipe"].ToString();
                 if (id_equipe != "7")
                 {
                     MessageBox.Show("Vous n'êtes pas en équipe Finatech!!");
                     return;
                 }
-                Hide();
-                new Controle(id_user, login).Show();
+                
             }
+            switch (radDropDownList1.Text)
+            {
+                case "Indexations":
+                    break;
+                case "Rejets":
+                    break;
+                default:
+                    MessageBox.Show("Veuillez sélectionner une opération!");
+                    return;
+            }
+            Hide();
+            new Controle(id_user, login, radDropDownList1.Text).Show();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)

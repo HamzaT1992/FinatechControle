@@ -23,9 +23,10 @@ namespace FinatechControle
     {
         // id utilisateur de controle
         string id_user_control;
+        string status;
         RadTreeNode CurrentNode = new RadTreeNode();
 
-        public Controle(string id_user, string userControl)
+        public Controle(string id_user, string userControl, string operation)
         {
             InitializeComponent();
             id_user_control = id_user;
@@ -35,6 +36,7 @@ namespace FinatechControle
             radLabel3.Text = userControl;
             //fournisseur1.radTreeView = radTreeView2;
             //splitPanel3
+            status = operation == "Indexations" ? "in (3,6)" : " = 12";
         }
 
         private void RadForm1_Load(object sender, EventArgs e)
@@ -47,14 +49,12 @@ namespace FinatechControle
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
-                string rqtNumBoites = "select distinct Numboite from DossiersIndexeV where id_status in (3,6) order by Numboite";
+                string rqtNumBoites = $"select distinct NumBoite from DossiersIndexeV where id_status {status} order by NumBoite";
 
 
                 SqlDataAdapter da = new SqlDataAdapter(rqtNumBoites, cnn);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
-                
-                
 
                 foreach (DataRow row in dt.Rows)
                 {
@@ -151,8 +151,9 @@ namespace FinatechControle
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
-                var boite = numboite == "" ? "Numboite is null" : "Numboite = '" + numboite + "'";
-                string reqdocs = "select * from DossiersIndexeV where id_status in (3,6) and " + boite;
+                //var boite = numboite == "" ? "Numboite is null" : "Numboite = '" + numboite + "'";
+                //string reqdocs = "select * from DossiersIndexeV where id_status in (3,6) and " + boite;
+                string reqdocs = $"select * from DossiersIndexeV where id_status {status} and convert(int,NumBoite) = "+numboite;
 
                 SqlDataAdapter da = new SqlDataAdapter(reqdocs, cnn);
                 DataTable dt = new DataTable();
@@ -322,9 +323,10 @@ namespace FinatechControle
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
-                string reqdocs = $"select * from {table} where NomDossier = '{nomDoss.Replace("'","''")}'";
+                string reqdocs = $"select * from {table} where NomDossier = @nomdoc";
 
                 SqlDataAdapter da = new SqlDataAdapter(reqdocs, cnn);
+                da.SelectCommand.Parameters.AddWithValue("@nomdoc", nomDoss);
                 
                 DataTable dt = new DataTable();
                 da.Fill(dt);
