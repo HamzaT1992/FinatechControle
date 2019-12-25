@@ -37,6 +37,7 @@
             this.radPanel5 = new Telerik.WinControls.UI.RadPanel();
             this.radPanel2 = new Telerik.WinControls.UI.RadPanel();
             this.radLabel3 = new Telerik.WinControls.UI.RadLabel();
+            this.lb_prod = new Telerik.WinControls.UI.RadLabel();
             this.radLabel4 = new Telerik.WinControls.UI.RadLabel();
             this.splitPanel2 = new Telerik.WinControls.UI.SplitPanel();
             this.radPanel6 = new Telerik.WinControls.UI.RadPanel();
@@ -51,8 +52,8 @@
             this.radContextMenu1 = new Telerik.WinControls.UI.RadContextMenu(this.components);
             this.openxml = new Telerik.WinControls.UI.RadMenuItem();
             this.rescan = new Telerik.WinControls.UI.RadMenuItem();
-            this.radContextMenuManager1 = new Telerik.WinControls.UI.RadContextMenuManager();
             this.nodeCopyName = new Telerik.WinControls.UI.RadMenuItem();
+            this.radContextMenuManager1 = new Telerik.WinControls.UI.RadContextMenuManager();
             ((System.ComponentModel.ISupportInitialize)(this.radTreeView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPdfViewerNavigator1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPdfViewer2)).BeginInit();
@@ -65,6 +66,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.radPanel2)).BeginInit();
             this.radPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lb_prod)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitPanel2)).BeginInit();
             this.splitPanel2.SuspendLayout();
@@ -91,7 +93,7 @@
             this.radTreeView2.Location = new System.Drawing.Point(0, 0);
             this.radTreeView2.Name = "radTreeView2";
             this.radTreeView2.ShowNodeToolTips = true;
-            this.radTreeView2.Size = new System.Drawing.Size(233, 760);
+            this.radTreeView2.Size = new System.Drawing.Size(233, 740);
             this.radTreeView2.SpacingBetweenNodes = -1;
             this.radTreeView2.TabIndex = 0;
             this.radTreeView2.ThemeName = "ControlDefault";
@@ -153,20 +155,21 @@
             // 
             this.radPanel5.Controls.Add(this.radTreeView2);
             this.radPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radPanel5.Location = new System.Drawing.Point(0, 39);
+            this.radPanel5.Location = new System.Drawing.Point(0, 59);
             this.radPanel5.Name = "radPanel5";
-            this.radPanel5.Size = new System.Drawing.Size(233, 760);
+            this.radPanel5.Size = new System.Drawing.Size(233, 740);
             this.radPanel5.TabIndex = 0;
             this.radPanel5.Text = "radPanel5";
             // 
             // radPanel2
             // 
             this.radPanel2.Controls.Add(this.radLabel3);
+            this.radPanel2.Controls.Add(this.lb_prod);
             this.radPanel2.Controls.Add(this.radLabel4);
             this.radPanel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.radPanel2.Location = new System.Drawing.Point(0, 0);
             this.radPanel2.Name = "radPanel2";
-            this.radPanel2.Size = new System.Drawing.Size(233, 39);
+            this.radPanel2.Size = new System.Drawing.Size(233, 59);
             this.radPanel2.TabIndex = 21;
             // 
             // radLabel3
@@ -175,6 +178,13 @@
             this.radLabel3.Name = "radLabel3";
             this.radLabel3.Size = new System.Drawing.Size(2, 2);
             this.radLabel3.TabIndex = 1;
+            // 
+            // lb_prod
+            // 
+            this.lb_prod.Location = new System.Drawing.Point(17, 35);
+            this.lb_prod.Name = "lb_prod";
+            this.lb_prod.Size = new System.Drawing.Size(2, 2);
+            this.lb_prod.TabIndex = 2;
             // 
             // radLabel4
             // 
@@ -344,6 +354,7 @@
             this.radPanel2.ResumeLayout(false);
             this.radPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lb_prod)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitPanel2)).EndInit();
             this.splitPanel2.ResumeLayout(false);
@@ -395,5 +406,6 @@
         private Telerik.WinControls.UI.RadMenuItem rescan;
         private Telerik.WinControls.UI.RadContextMenuManager radContextMenuManager1;
         private Telerik.WinControls.UI.RadMenuItem nodeCopyName;
+        private Telerik.WinControls.UI.RadLabel lb_prod;
     }
 }

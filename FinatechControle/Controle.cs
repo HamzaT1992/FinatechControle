@@ -19,11 +19,12 @@ using Telerik.WinControls.UI.Docking;
 
 namespace FinatechControle
 {
-    public partial class Controle : Telerik.WinControls.UI.RadForm
+    public partial class Controle : RadForm
     {
         // id utilisateur de controle
         string id_user_control;
         string status;
+        string operation;
         RadTreeNode CurrentNode = new RadTreeNode();
 
         public Controle(string id_user, string userControl, string operation)
@@ -36,7 +37,9 @@ namespace FinatechControle
             radLabel3.Text = userControl;
             //fournisseur1.radTreeView = radTreeView2;
             //splitPanel3
-            status = operation == "Indexations" ? "in (3,6)" : " = 12";
+            this.operation = operation;
+            status = operation == "Indexations" ? "in (3,6,11,12)" : " = 12";
+            CalculeProdControl();
         }
 
         private void RadForm1_Load(object sender, EventArgs e)
@@ -49,80 +52,110 @@ namespace FinatechControle
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
-                string rqtNumBoites = $"select distinct NumBoite from DossiersIndexeV where id_status {status} order by NumBoite";
+                string affect = operation == "Indexations" ? $"and NumBoite in(select NumBoite from boite where user_affect = {id_user_control})" : "";
 
+                string rqtNumBoites = $"select distinct NumBoite from DossiersIndexeV where id_status {status} {affect} order by NumBoite";
 
                 SqlDataAdapter da = new SqlDataAdapter(rqtNumBoites, cnn);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
-
-                foreach (DataRow row in dt.Rows)
+                radTreeView2.BeginUpdate();
+                try
                 {
-                    
-                    RadTreeNode boite = new RadTreeNode();
-                    var numBoite = row["Numboite"].ToString();
-                    
-                    boite.Value = numBoite;
-                    var Docs = getDocs(numBoite);
-                    var alldocsCount = Docs.Rows.Count;
-                    int Fl_oks = 0;
-                    foreach (DataRow item in Docs.Rows)
+                    // TreeNode adds changes here
+                    foreach (DataRow row in dt.Rows)
                     {
-                        RadTreeNode doc = new RadTreeNode();
-                        var user_index = item["user_index"].ToString();
-                        var doss = item["NomDossier"].ToString();
-                        //var pdf = doss.Split('\\')[1];
-                        var path = item["Chemin"].ToString();
 
-                        var statusDoc = (int)item["id_status"];
-                        var image = "folder_closed";
-                        if (statusDoc == 6)
+                        RadTreeNode boite = new RadTreeNode();
+                        var numBoite = row["Numboite"].ToString();
+
+                        boite.Value = numBoite;
+                        var Docs = getDocs(numBoite);
+                        var alldocsCount = Docs.Rows.Count;
+                        int Fl_oks = 0;
+                        foreach (DataRow item in Docs.Rows)
                         {
-                            Fl_oks++;
-                            image = "folder_ok";
+                            RadTreeNode doc = new RadTreeNode();
+                            var user_index = item["user_index"].ToString();
+                            var doss = item["NomDossier"].ToString();
+                            //var pdf = doss.Split('\\')[1];
+                            var path = item["Chemin"].ToString();
+
+                            var statusDoc = (int)item["id_status"];
+                            var image = "folder_closed";
+                            if (statusDoc == 6)
+                            {
+                                Fl_oks++;
+                                image = "folder_ok";
+                            }
+                            doc.Text = $"({user_index}) {doss}";
+                            doc.Value = path;
+                            doc.Tag = new NodeData
+                            {
+                                type = item["type"].ToString(),
+                                NomDoc = doss,
+                                xmlPath = Path.GetDirectoryName(path) + ".xml",
+                                status = statusDoc
+                            };
+                            doc.Image = statusDoc == 3 ? Resources.folder_closed : Resources.folder_ok;
+                            doc.ToolTipText = doss;
+                            doc.ContextMenu = radContextMenu1;
+                            //switch (item["type"].ToString())
+                            //{
+                            //    case "Achat/FOURNISSEUR":
+                            //        doc.Image = Resources.redFolder;
+                            //        break;
+                            //    case "Vente/Client":
+                            //        doc.Image = Resources.blueFolder;
+                            //        break;
+                            //    default:
+                            //        doc.Image = Resources.vioFolder;
+                            //        break;
+                            //}
+
+                            boite.Nodes.Add(doc);
                         }
-                        doc.Text = $"({user_index}) {doss}";
-                        doc.Value = path;
-                        doc.Tag = new NodeData {
-                            type = item["type"].ToString(),
-                            NomDoc = doss,
-                            xmlPath = Path.GetDirectoryName(path) + ".xml",
-                            status = statusDoc
-                        };
-                        doc.Image = statusDoc == 3 ? Resources.folder_closed : Resources.folder_ok;
-                        doc.ToolTipText = doss;
-                        doc.ContextMenu = radContextMenu1;
-                        //switch (item["type"].ToString())
-                        //{
-                        //    case "Achat/FOURNISSEUR":
-                        //        doc.Image = Resources.redFolder;
-                        //        break;
-                        //    case "Vente/Client":
-                        //        doc.Image = Resources.blueFolder;
-                        //        break;
-                        //    default:
-                        //        doc.Image = Resources.vioFolder;
-                        //        break;
-                        //}
+                        //Boites.Nodes.Add(boite);
+                        boite.Text = $"Boite {numBoite} ({Docs.Rows.Count})";
+                        Bitmap img = Resources.boite2;
 
-                        boite.Nodes.Add(doc);
+                        if (Fl_oks > 0 && Fl_oks < alldocsCount)
+                        {
+                            img = Resources.boite_edit;
+                        }
+                        else if (Fl_oks == alldocsCount)
+                        {
+                            img = Resources.boite_ok;
+                        }
+                        boite.Image = img;
+                        radTreeView2.Nodes.Add(boite);
                     }
-                    //Boites.Nodes.Add(boite);
-                    boite.Text = $"Boite {numBoite} ({Docs.Rows.Count})";
-                    Bitmap img = Resources.boite2;
-
-                    if (Fl_oks > 0 && Fl_oks < alldocsCount)
-                    {
-                        img = Resources.boite_edit;
-                    }
-                    else if (Fl_oks == alldocsCount)
-                    {
-                        img = Resources.boite_ok;
-                    }
-                    boite.Image = img;
-                    radTreeView2.Nodes.Add(boite);
+                }
+                finally
+                {
+                    radTreeView2.EndUpdate();
                 }
 
+                // Calcule du total prod
+                CalculeProdControl();
+            }
+        }
+
+        public void CalculeProdControl()
+        {
+            //<html><strong>Login : </strong></html>
+            var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
+            using (SqlConnection cnn = new SqlConnection(constr))
+            {
+                cnn.Open();
+                var date = DateTime.Now.ToString("dd/MM/yyyy");
+                string rqt  =  $"SELECT COUNT(*) FROM DossiersIndexeV " +
+                                        $"WHERE id_status in(6,11) " +
+                                        $"AND id_user_control = {id_user_control} " +
+                                        $"AND CONVERT(date,date_control,101) = '{date}'";
+
+                var count = new SqlCommand(rqt, cnn).ExecuteScalar().ToString();
+                lb_prod.Text = $"<html><strong>Prod {date} : {count}</strong></html>";
             }
         }
 
@@ -135,7 +168,6 @@ namespace FinatechControle
         {
 
             Process.Start("explorer.exe", Path.GetDirectoryName(CurrentNode.Value.ToString()));
-
         }
 
         private void Openxml_Click(object sender, EventArgs e)
@@ -183,16 +215,14 @@ namespace FinatechControle
                             ((NodeData)CurrentNode.Tag).image = "folder_ok";
                         }
                     }
-                    CurrentNode = e.Node;
-                    CurrentNode.Image = Resources.folder;
-                    ((NodeData)CurrentNode.Tag).image = "folder";
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
-                    return;
                 }
-
+                CurrentNode = e.Node;
+                CurrentNode.Image = Resources.folder;
+                ((NodeData)CurrentNode.Tag).image = "folder";
                 var nodedata = (NodeData)e.Node.Tag;
                 // Verifier le type de Document
                 var type = nodedata.type;

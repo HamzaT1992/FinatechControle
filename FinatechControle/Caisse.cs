@@ -108,6 +108,7 @@ namespace FinatechControle
             }
             // supprimer le document dans le treeView
             controle.UpdateTreeView();
+            controle.CalculeProdControl();
         }
 
         private void TB_Validating(object sender, System.ComponentModel.CancelEventArgs e)
