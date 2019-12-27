@@ -194,6 +194,12 @@
       <DependentUpon>Controle.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper.cs" />
+    <Compile Include="Import.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Import.Designer.cs">
+      <DependentUpon>Import.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -211,6 +217,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fournisseur.resx">
       <DependentUpon>Fournisseur.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Import.resx">
+      <DependentUpon>Import.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Controle.resx">
@@ -258,6 +267,7 @@
     <None Include="Resources\folder_closed.png" />
     <None Include="Resources\folder_ok.png" />
     <None Include="Resources\folder.png" />
+    <Content Include="Resources\folder_error.png" />
     <Content Include="Resources\ok.ico" />
     <Content Include="Resources\openfilefolder.png" />
     <Content Include="Resources\redFolder.png" />

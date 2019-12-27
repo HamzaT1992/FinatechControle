@@ -13,6 +13,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Telerik.WinControls;
 using Telerik.WinControls.UI;
 using Telerik.WinControls.UI.Docking;
@@ -38,7 +39,7 @@ namespace FinatechControle
             //fournisseur1.radTreeView = radTreeView2;
             //splitPanel3
             this.operation = operation;
-            status = operation == "Indexations" ? "in (3,6,11,12)" : " = 12";
+            status = operation == "Indexations" ? "in (3,6,11,12,18)" : " = 12";
             CalculeProdControl();
         }
 
@@ -47,6 +48,7 @@ namespace FinatechControle
             openxml.Click += Openxml_Click;
             rescan.Click += Rescan_Click;
             nodeCopyName.Click += NodeCopyName_Click;
+            delete.Click += Delete_Click;
             // Chareger les boites et les dossiers
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
             using (SqlConnection cnn = new SqlConnection(constr))
@@ -83,10 +85,18 @@ namespace FinatechControle
 
                             var statusDoc = (int)item["id_status"];
                             var image = "folder_closed";
+                            doc.Image = Resources.folder_closed;
                             if (statusDoc == 6)
                             {
                                 Fl_oks++;
                                 image = "folder_ok";
+                                doc.Image = Resources.folder_ok;
+                            }
+                            else if(statusDoc == 18)
+                            {
+                                Fl_oks++;
+                                image = "folder_error";
+                                doc.Image = Resources.folder_error;
                             }
                             doc.Text = $"({user_index}) {doss}";
                             doc.Value = path;
@@ -97,7 +107,12 @@ namespace FinatechControle
                                 xmlPath = Path.GetDirectoryName(path) + ".xml",
                                 status = statusDoc
                             };
-                            doc.Image = statusDoc == 3 ? Resources.folder_closed : Resources.folder_ok;
+                            switch (statusDoc)
+                            {
+                                default:
+                                    break;
+                            }
+                            
                             doc.ToolTipText = doss;
                             doc.ContextMenu = radContextMenu1;
                             //switch (item["type"].ToString())
@@ -173,9 +188,55 @@ namespace FinatechControle
         private void Openxml_Click(object sender, EventArgs e)
         {
             var data = (NodeData)CurrentNode.Tag;
-            Process.Start("iexplore", data.xmlPath);
+            //Process.Start("notepadplus", data.xmlPath);
+            var SourcePath = "";
+            var xmlDoc = XElement.Load(data.xmlPath);
+
+            var el = xmlDoc.Element("Documents");
+            if (el != null)
+            {
+                SourcePath = el.Element("Document").Element("Images").Element("Image").Attribute("SourcePath").Value;
+            }
+            else
+            {
+                SourcePath = xmlDoc.Element("Images").Element("Image").Attribute("SourcePath").Value;
+            }
+            MessageBox.Show(SourcePath);
         }
 
+        private void Delete_Click(object sender, EventArgs e)
+        {
+            var data = (NodeData)CurrentNode.Tag;
+            data.status = 18;
+            CurrentNode.Image = Resources.folder_error;
+            var table = "";
+            switch (data.type)
+            {
+                case "Achat/FOURNISSEUR":
+                    table = "achat";
+                    break;
+                case "Vente/Client":
+                    table = "vente";
+                    break;
+                case "BANQUES":
+                    table = "banque";
+                    break;
+                case "CAISSES":
+                    table = "caisse";
+                    break;
+
+            }
+
+            var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
+            using (SqlConnection cnn = new SqlConnection(constr))
+            {
+                cnn.Open();
+                //var boite = numboite == "" ? "Numboite is null" : "Numboite = '" + numboite + "'";
+                //string reqdocs = "select * from DossiersIndexeV where id_status in (3,6) and " + boite;
+                string reqdocs = $"update {table} set id_status = 18 where NomDossier='{data.NomDoc.Replace("'","''")}'";
+                new SqlCommand(reqdocs, cnn).ExecuteNonQuery();
+            }
+        }
         // Obtenir tous les documents d'une boite
         private DataTable getDocs(string numboite)
         {
@@ -214,6 +275,12 @@ namespace FinatechControle
                             CurrentNode.Image = Resources.folder_ok;
                             ((NodeData)CurrentNode.Tag).image = "folder_ok";
                         }
+                        else if (CrData.image == "folder" && CrData.status == 18)
+                        {
+                            CurrentNode.Image = Resources.folder_error;
+                            ((NodeData)CurrentNode.Tag).image = "folder_error";
+                        }
+
                     }
                 }
                 catch (Exception ex)
@@ -380,22 +447,22 @@ namespace FinatechControle
             radTreeView2.SelectedNode = docControle.NextNode??CurrentNode;
             var allnodes = parent.Nodes.Count;
             var nodeok = 0;
-            foreach (var item in parent.Nodes)
-            {
-                if (((NodeData)item.Tag).status == 6)
-                {
-                    nodeok++;
-                }
-            }
-            if (nodeok > 0 && nodeok < allnodes)
-            {
-                parent.Image = Resources.boite_edit;
-            }
-            else if (nodeok == allnodes)
-            {
-                parent.Image = Resources.boite_ok;
-                parent.Collapse();
-            }
+            //foreach (var item in parent.Nodes)
+            //{
+            //    if (((NodeData)item.Tag).status == 6)
+            //    {
+            //        nodeok++;
+            //    }
+            //}
+            //if (nodeok > 0 && nodeok < allnodes)
+            //{
+            //    parent.Image = Resources.boite_edit;
+            //}
+            //else if (nodeok == allnodes)
+            //{
+            //    parent.Image = Resources.boite_ok;
+            //    parent.Collapse();
+            //}
         }
 
         private void RadForm1_FormClosed(object sender, FormClosedEventArgs e)

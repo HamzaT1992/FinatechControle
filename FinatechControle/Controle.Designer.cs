@@ -54,6 +54,7 @@
             this.rescan = new Telerik.WinControls.UI.RadMenuItem();
             this.nodeCopyName = new Telerik.WinControls.UI.RadMenuItem();
             this.radContextMenuManager1 = new Telerik.WinControls.UI.RadContextMenuManager();
+            this.delete = new Telerik.WinControls.UI.RadMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.radTreeView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPdfViewerNavigator1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPdfViewer2)).BeginInit();
@@ -303,7 +304,8 @@
             this.radContextMenu1.Items.AddRange(new Telerik.WinControls.RadItem[] {
             this.openxml,
             this.rescan,
-            this.nodeCopyName});
+            this.nodeCopyName,
+            this.delete});
             this.radContextMenu1.ThemeName = "ControlDefault";
             // 
             // openxml
@@ -323,6 +325,11 @@
             this.nodeCopyName.Name = "nodeCopyName";
             this.nodeCopyName.Text = "Copier";
             this.nodeCopyName.ToolTipText = "Copier le nom du dossier";
+            // 
+            // delete
+            // 
+            this.delete.Name = "delete";
+            this.delete.Text = "Supprimer";
             // 
             // Controle
             // 
@@ -407,5 +414,6 @@
         private Telerik.WinControls.UI.RadContextMenuManager radContextMenuManager1;
         private Telerik.WinControls.UI.RadMenuItem nodeCopyName;
         private Telerik.WinControls.UI.RadLabel lb_prod;
+        private Telerik.WinControls.UI.RadMenuItem delete;
     }
 }

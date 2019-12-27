@@ -89,7 +89,7 @@ namespace FinatechControle
             //verifier les chagements des colonnes
             Helper.VerifyChanges(Fourn_Values, this);
 
-            Fourn_Values["NumBoite"] = TBNumBoite.Text == "" ? "0" : TBNumBoite.Text;
+            Fourn_Values["NumBoite"] = string.IsNullOrWhiteSpace(TBNumBoite.Text) ? "0" : TBNumBoite.Text;
 
             Helper.CheckForQuote(ref Fourn_Values);
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
@@ -98,7 +98,7 @@ namespace FinatechControle
                 cnn.Open();
 
                 // update vente set [Client]= ,[DateFacture]= ,[Numfacture]= ,[NumProjet]= ,[BU]= ,[Numboite]= where [NomDossier]=
-                var req = $"UPDATE achat SET  [Fournisseur]='{Fourn_Values["Fournisseur"]}' ,[DateFacture]='{Fourn_Values["DateFacture"]}' ,[Reference]='{Fourn_Values["Reference"]}' ,[NumBonCommande]='{Fourn_Values["NumBonCommande"]}', [NumProjet]='{Fourn_Values["NumProjet"]}',[BU]='{Fourn_Values["BU"]}' ,[NumBoite]={Fourn_Values["NumBoite"]} ,[id_status]=6 ,[id_user_control]={id_user_control},date_control=GETDATE() WHERE [NomDossier]='{NomDoc}' ";
+                var req = $"UPDATE achat SET [Fournisseur]='{Fourn_Values["Fournisseur"]}' ,[DateFacture]='{Fourn_Values["DateFacture"]}' ,[Reference]='{Fourn_Values["Reference"]}' ,[NumBonCommande]='{Fourn_Values["NumBonCommande"]}', [NumProjet]='{Fourn_Values["NumProjet"]}',[BU]='{Fourn_Values["BU"]}' ,[NumBoite]={Fourn_Values["NumBoite"]} ,[id_status]=6 ,[id_user_control]={id_user_control},date_control=GETDATE() WHERE [NomDossier]='{NomDoc}' ";
 
                 var cmd = new SqlCommand(req, cnn);
                 cmd.ExecuteNonQuery();

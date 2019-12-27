@@ -100,7 +100,7 @@ namespace FinatechControle
 
 
             bnq_Values["NumBoite"] = string.IsNullOrWhiteSpace(TBNumBoite.Text) ? "0" : TBNumBoite.Text;
-            bnq_Values["Montant"] = string.IsNullOrWhiteSpace(Montant) ? "0" : Montant;
+            bnq_Values["Montant"] = string.IsNullOrWhiteSpace(TBMt.Text) ? "0" : TBMt.Text;
 
             Helper.CheckForQuote(ref bnq_Values);
             // update vente set [Client]= ,[DateFacture]= ,[Numfacture]= ,[NumProjet]= ,[BU]= ,[Numboite]= where [NomDossier]=
@@ -113,7 +113,7 @@ namespace FinatechControle
                 cmd.ExecuteNonQuery();
                 //MessageBox.Show("Opération effectué!!");
             }
-            // supprimer le document dans le treeView
+            
             controle.UpdateTreeView();
             controle.CalculeProdControl();
         }
