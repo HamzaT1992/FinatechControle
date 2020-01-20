@@ -206,6 +206,12 @@
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
+    <Compile Include="Rechercher.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Rechercher.Designer.cs">
+      <DependentUpon>Rechercher.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Banque.resx">
       <DependentUpon>Banque.cs</DependentUpon>
     </EmbeddedResource>
@@ -235,6 +241,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Rechercher.resx">
+      <DependentUpon>Rechercher.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -26,11 +26,16 @@ namespace FinatechControle
         string id_user_control;
         string status;
         string operation;
-        RadTreeNode CurrentNode = new RadTreeNode();
+
+        public bool boiteOpen = false;
+        public RadTreeView radTree;
+        public RadTreeNode CurrentBoite = new RadTreeNode();
+        public RadTreeNode CurrentDoc = new RadTreeNode();
 
         public Controle(string id_user, string userControl, string operation)
         {
             InitializeComponent();
+            radTree = radTreeView2;
             id_user_control = id_user;
             //var Boites = new RadTreeNode();
             //Boites.Text = "Boites";
@@ -39,12 +44,19 @@ namespace FinatechControle
             //fournisseur1.radTreeView = radTreeView2;
             //splitPanel3
             this.operation = operation;
-            status = operation == "Indexations" ? "in (3,6,11,12,18)" : " = 12";
+            status = operation == "Indexations" ? "in (3,4)" : " = 12";
             CalculeProdControl();
         }
 
         private void RadForm1_Load(object sender, EventArgs e)
         {
+            // menu Boites
+            openBoite.Click += OpenBoite_Click;
+            toInstance.Click += ToInstance_Click;
+            closeBoite.Click += CloseBoite_Click;
+            searchInBoite.Click += SearchInBoite_Click;
+            toInstance.Enabled = closeBoite.Enabled = false;
+            // menu Documents
             openxml.Click += Openxml_Click;
             rescan.Click += Rescan_Click;
             nodeCopyName.Click += NodeCopyName_Click;
@@ -54,9 +66,9 @@ namespace FinatechControle
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
-                string affect = operation == "Indexations" ? $"and NumBoite in(select NumBoite from boite where user_affect = {id_user_control})" : "";
+                string affect = operation == "Indexations" ? $"AND user_affect = {id_user_control}" : "";
 
-                string rqtNumBoites = $"select distinct NumBoite from DossiersIndexeV where id_status {status} {affect} order by NumBoite";
+                string rqtNumBoites = $"SELECT DISTINCT NumBoite FROM boite WHERE id_status {status} {affect} ORDER BY NumBoite";
 
                 SqlDataAdapter da = new SqlDataAdapter(rqtNumBoites, cnn);
                 DataTable dt = new DataTable();
@@ -69,82 +81,32 @@ namespace FinatechControle
                     {
 
                         RadTreeNode boite = new RadTreeNode();
+                        boite.ContextMenu = boiteContextMenu;
                         var numBoite = row["Numboite"].ToString();
 
                         boite.Value = numBoite;
                         var Docs = getDocs(numBoite);
-                        var alldocsCount = Docs.Rows.Count;
-                        int Fl_oks = 0;
-                        foreach (DataRow item in Docs.Rows)
-                        {
-                            RadTreeNode doc = new RadTreeNode();
-                            var user_index = item["user_index"].ToString();
-                            var doss = item["NomDossier"].ToString();
-                            //var pdf = doss.Split('\\')[1];
-                            var path = item["Chemin"].ToString();
+                        
 
-                            var statusDoc = (int)item["id_status"];
-                            var image = "folder_closed";
-                            doc.Image = Resources.folder_closed;
-                            if (statusDoc == 6)
-                            {
-                                Fl_oks++;
-                                image = "folder_ok";
-                                doc.Image = Resources.folder_ok;
-                            }
-                            else if(statusDoc == 18)
-                            {
-                                Fl_oks++;
-                                image = "folder_error";
-                                doc.Image = Resources.folder_error;
-                            }
-                            doc.Text = $"({user_index}) {doss}";
-                            doc.Value = path;
-                            doc.Tag = new NodeData
-                            {
-                                type = item["type"].ToString(),
-                                NomDoc = doss,
-                                xmlPath = Path.GetDirectoryName(path) + ".xml",
-                                status = statusDoc
-                            };
-                            switch (statusDoc)
-                            {
-                                default:
-                                    break;
-                            }
-                            
-                            doc.ToolTipText = doss;
-                            doc.ContextMenu = radContextMenu1;
-                            //switch (item["type"].ToString())
-                            //{
-                            //    case "Achat/FOURNISSEUR":
-                            //        doc.Image = Resources.redFolder;
-                            //        break;
-                            //    case "Vente/Client":
-                            //        doc.Image = Resources.blueFolder;
-                            //        break;
-                            //    default:
-                            //        doc.Image = Resources.vioFolder;
-                            //        break;
-                            //}
-
-                            boite.Nodes.Add(doc);
-                        }
                         //Boites.Nodes.Add(boite);
                         boite.Text = $"Boite {numBoite} ({Docs.Rows.Count})";
                         Bitmap img = Resources.boite2;
-
-                        if (Fl_oks > 0 && Fl_oks < alldocsCount)
+                        var bStatus = GetBoiteStatus(Docs);
+                        if (bStatus == 4)
                         {
                             img = Resources.boite_edit;
                         }
-                        else if (Fl_oks == alldocsCount)
+                        else if (bStatus == 6)
                         {
                             img = Resources.boite_ok;
                         }
                         boite.Image = img;
                         radTreeView2.Nodes.Add(boite);
                     }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
                 }
                 finally
                 {
@@ -154,6 +116,131 @@ namespace FinatechControle
                 // Calcule du total prod
                 CalculeProdControl();
             }
+        }
+
+        private void SearchInBoite_Click(object sender, EventArgs e)
+        {
+            new Rechercher(this).ShowDialog();
+        }
+
+        private void CloseBoite_Click(object sender, EventArgs e)
+        {
+            if (CurrentBoite != radTreeView2.SelectedNode)
+            {
+                MessageBox.Show($"Veuillez cloturer la boite {CurrentBoite.Value.ToString()}");
+            }
+            else
+            {
+                DialogResult result = MessageBox.Show($"Vous êtes sur de cloturer la boite","Verrification",MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                {
+                    var conStr = ConfigurationManager.ConnectionStrings["StrCon"].ToString();
+                    using (var con = new SqlConnection(conStr))
+                    {
+                        con.Open();
+
+                        var docs = getDocs(CurrentBoite.Value.ToString());
+                        var bStatus = GetBoiteStatus(docs);
+                        if (bStatus == 4)
+                        {
+                            MessageBox.Show($"Merci de valider tous les document avant de cloturer la boite", "Verrification", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            return;
+                        }
+                        else
+                        {
+                            var req = $"update boite set id_status = 6 where numboite = {CurrentBoite.Value}";
+                            new SqlCommand(req, con).ExecuteNonQuery();
+                            CurrentBoite.Remove();
+                            openBoite.Enabled = true;
+                            toInstance.Enabled = closeBoite.Enabled = boiteOpen = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ToInstance_Click(object sender, EventArgs e)
+        {
+            if (CurrentBoite != radTreeView2.SelectedNode)
+            {
+                MessageBox.Show($"Veuillez cloturer la boite {CurrentBoite.Value.ToString()}");
+            }
+            else
+            {
+                CurrentBoite.Nodes.Clear();
+                var conStr = ConfigurationManager.ConnectionStrings["StrCon"].ToString();
+                using (var con = new SqlConnection(conStr))
+                {
+                    con.Open();
+
+                    var docs = getDocs(CurrentBoite.Value.ToString());
+                    var bStatus = GetBoiteStatus(docs);
+
+                    var req = $"update boite set id_status = 4 where numboite = {CurrentBoite.Value}";
+                    new SqlCommand(req, con).ExecuteNonQuery();
+                    openBoite.Enabled = true;
+                    toInstance.Enabled = closeBoite.Enabled = boiteOpen = false;
+                }
+            }
+        }
+
+        private void OpenBoite_Click(object sender, EventArgs e)
+        {
+
+            if (radTreeView2.SelectedNode.Level == 0)
+            {
+                CurrentBoite = radTreeView2.SelectedNode;
+                openBoite.Enabled = false;
+                toInstance.Enabled = closeBoite.Enabled = boiteOpen = true;
+
+                var Docs = getDocs(CurrentBoite.Value.ToString());
+
+                foreach (DataRow item in Docs.Rows)
+                {
+                    RadTreeNode doc = new RadTreeNode();
+                    var user_index = item["user_index"].ToString();
+                    var doss = item["NomDossier"].ToString();
+                    //var pdf = doss.Split('\\')[1];
+                    var path = item["Chemin"].ToString();
+
+                    var statusDoc = (int)item["id_status"];
+                    var image = "folder_closed";
+                    doc.Image = Resources.folder_closed;
+                    if (statusDoc == 6)
+                    {
+                        image = "folder_ok";
+                        doc.Image = Resources.folder_ok;
+                    }
+                    else if (statusDoc == 18)
+                    {
+                        image = "folder_error";
+                        doc.Image = Resources.folder_error;
+                    }
+                    else if(statusDoc == 19)
+                    {
+                        image = "blueFolder";
+                        doc.Image = Resources.blueFolder;
+                    }
+                    doc.Name = doss;
+                    doc.Text = $"({user_index}) {doss}";
+                    doc.Value = path;
+                    doc.Tag = new NodeData
+                    {
+                        type = item["type"].ToString(),
+                        NomDoc = doss,
+                        xmlPath = Path.GetDirectoryName(path) + ".xml",
+                        status = statusDoc,
+                        image = image
+                    };
+
+                    doc.ToolTipText = doss;
+                    doc.ContextMenu = docContextMenu;
+
+                    CurrentBoite.Nodes.Add(doc);
+                }
+                CurrentBoite.Expand();
+            }
+
         }
 
         public void CalculeProdControl()
@@ -176,18 +263,18 @@ namespace FinatechControle
 
         private void NodeCopyName_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(((NodeData)CurrentNode.Tag).NomDoc);
+            Clipboard.SetText(((NodeData)CurrentDoc.Tag).NomDoc);
         }
 
         private void Rescan_Click(object sender, EventArgs e)
         {
 
-            Process.Start("explorer.exe", Path.GetDirectoryName(CurrentNode.Value.ToString()));
+            Process.Start("explorer.exe", Path.GetDirectoryName(CurrentDoc.Value.ToString()));
         }
 
         private void Openxml_Click(object sender, EventArgs e)
         {
-            var data = (NodeData)CurrentNode.Tag;
+            var data = (NodeData)CurrentDoc.Tag;
             //Process.Start("notepadplus", data.xmlPath);
             var SourcePath = "";
             var xmlDoc = XElement.Load(data.xmlPath);
@@ -206,26 +293,10 @@ namespace FinatechControle
 
         private void Delete_Click(object sender, EventArgs e)
         {
-            var data = (NodeData)CurrentNode.Tag;
+            var data = (NodeData)CurrentDoc.Tag;
             data.status = 18;
-            CurrentNode.Image = Resources.folder_error;
-            var table = "";
-            switch (data.type)
-            {
-                case "Achat/FOURNISSEUR":
-                    table = "achat";
-                    break;
-                case "Vente/Client":
-                    table = "vente";
-                    break;
-                case "BANQUES":
-                    table = "banque";
-                    break;
-                case "CAISSES":
-                    table = "caisse";
-                    break;
-
-            }
+            CurrentDoc.Image = Resources.folder_error;
+            var table = GetDocTable();
 
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
             using (SqlConnection cnn = new SqlConnection(constr))
@@ -246,13 +317,64 @@ namespace FinatechControle
                 cnn.Open();
                 //var boite = numboite == "" ? "Numboite is null" : "Numboite = '" + numboite + "'";
                 //string reqdocs = "select * from DossiersIndexeV where id_status in (3,6) and " + boite;
-                string reqdocs = $"select * from DossiersIndexeV where id_status {status} and convert(int,NumBoite) = "+numboite;
+                string reqdocs = $"select * from DossiersIndexeV where NumBoite = "+numboite;
 
                 SqlDataAdapter da = new SqlDataAdapter(reqdocs, cnn);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
                 return dt;           
             }
+        }
+
+        private string GetDocTable()
+        {
+            var data = (NodeData)CurrentDoc.Tag;
+
+            var table = "";
+            switch (data.type)
+            {
+                case "Achat/FOURNISSEUR":
+                    table = "achat";
+                    break;
+                case "Vente/Client":
+                    table = "vente";
+                    break;
+                case "BANQUES":
+                    table = "banque";
+                    break;
+                case "CAISSES":
+                    table = "caisse";
+                    break;
+                case "Import":
+                    table = "import";
+                    break;
+
+            }
+            return table;
+        }
+
+        private int GetBoiteStatus(DataTable Docs)
+        {
+            var alldocsCount = Docs.Rows.Count;
+            int Fl_oks = 0;
+            int status = 0;
+            foreach (DataRow item in Docs.Rows)
+            {
+                var statusDoc = (int)item["id_status"];
+                if (statusDoc == 6 || statusDoc == 18)
+                {
+                    Fl_oks++;
+                }
+            }
+            if (Fl_oks > 0 && Fl_oks < alldocsCount)
+            {
+                status = 4;
+            }
+            else if (Fl_oks == alldocsCount)
+            {
+                status = 6;
+            }
+            return status;
         }
         // sélectionner un dossier
         private void Node_Changed(object sender, RadTreeViewEventArgs e)
@@ -262,23 +384,28 @@ namespace FinatechControle
                 try
                 {
                     radPdfViewer2.LoadDocument(e.Node.Value.ToString());
-                    var CrData = (NodeData)CurrentNode.Tag;
+                    var CrData = (NodeData)CurrentDoc.Tag;
                     if (CrData != null)
                     {
                         if (CrData.image == "folder" && CrData.status == 3)
                         {
-                            CurrentNode.Image = Resources.folder_closed;
-                            ((NodeData)CurrentNode.Tag).image = "folder_closed";
+                            CurrentDoc.Image = Resources.folder_closed;
+                            ((NodeData)CurrentDoc.Tag).image = "folder_closed";
                         }
                         else if (CrData.image == "folder" && CrData.status == 6)
                         {
-                            CurrentNode.Image = Resources.folder_ok;
-                            ((NodeData)CurrentNode.Tag).image = "folder_ok";
+                            CurrentDoc.Image = Resources.folder_ok;
+                            ((NodeData)CurrentDoc.Tag).image = "folder_ok";
                         }
                         else if (CrData.image == "folder" && CrData.status == 18)
                         {
-                            CurrentNode.Image = Resources.folder_error;
-                            ((NodeData)CurrentNode.Tag).image = "folder_error";
+                            CurrentDoc.Image = Resources.folder_error;
+                            ((NodeData)CurrentDoc.Tag).image = "folder_error";
+                        }                        
+                        else if (CrData.image == "folder" && CrData.status == 19)
+                        {
+                            CurrentDoc.Image = Resources.blueFolder;
+                            ((NodeData)CurrentDoc.Tag).image = "blueFolder";
                         }
 
                     }
@@ -287,9 +414,9 @@ namespace FinatechControle
                 {
                     MessageBox.Show(ex.Message);
                 }
-                CurrentNode = e.Node;
-                CurrentNode.Image = Resources.folder;
-                ((NodeData)CurrentNode.Tag).image = "folder";
+                CurrentDoc = e.Node;
+                CurrentDoc.Image = Resources.folder;
+                ((NodeData)CurrentDoc.Tag).image = "folder";
                 var nodedata = (NodeData)e.Node.Tag;
                 // Verifier le type de Document
                 var type = nodedata.type;
@@ -411,6 +538,38 @@ namespace FinatechControle
                     caisse.BringToFront();
                     caisse.Dock = DockStyle.Fill;
                 }
+                // Pour le type import
+                else if (type == "IMPORT")
+                {
+                    var row = getIndexs(NomDoc, "import").Rows[0];
+                    radLabel2.Text = row["user_index"].ToString();
+                    CalcTauxErr(type, row["user_index"].ToString());
+                    var import = new Import()
+                    {
+                        controle = this,
+                        NomDoc = NomDoc.Replace("'", "''"),
+                        id_user_control = id_user_control,
+                        NumDossier = row["NumDossier"].ToString(),
+                        NumFactureFournisseurEtrange = row["NumFactureFournisseurEtrange"].ToString(),
+                        NumBonComndEtrnge = row["NumBonComndEtrnge"].ToString(),
+                        NomFournisseurEtrange = row["NomFournisseurEtrange"].ToString(),
+                        RefFactureFournisseurLocal1 = row["RefFactureFournisseurLocal1"].ToString(),
+                        NumBonComndFournisseurLocal1 = row["NumBonComndFournisseurLocal1"].ToString(),
+                        RefFactureFournisseurLocal2 = row["RefFactureFournisseurLocal2"].ToString(),
+                        NumBonComndFournisseurLocal2 = row["NumBonComndFournisseurLocal2"].ToString(),
+                        NumEngagementImport = row["NumEngagementImport"].ToString(),
+                        NumBoite = row["NumBoite"].ToString()
+                    };
+                    foreach (Control item in splitPanel3.Controls)
+                    {
+                        if (item.GetType() == typeof(RadPanel))
+                            continue;
+                        item.Dispose();
+                    }
+                    splitPanel3.Controls.Add(import);
+                    import.BringToFront();
+                    import.Dock = DockStyle.Fill;
+                }
             }
         }    
         // obtenir les indexes d'un document
@@ -438,13 +597,13 @@ namespace FinatechControle
 
         public void UpdateTreeView()
         {
-            CurrentNode.Image = Resources.folder_ok;
-            ((NodeData)CurrentNode.Tag).image = "folder_ok";
-            ((NodeData)CurrentNode.Tag).status = 6;
-            var docControle = CurrentNode;
+            CurrentDoc.Image = Resources.folder_ok;
+            ((NodeData)CurrentDoc.Tag).image = "folder_ok";
+            ((NodeData)CurrentDoc.Tag).status = 6;
+            var docControle = CurrentDoc;
             var parent = docControle.Parent;
 
-            radTreeView2.SelectedNode = docControle.NextNode??CurrentNode;
+            radTreeView2.SelectedNode = docControle.NextNode??CurrentDoc;
             var allnodes = parent.Nodes.Count;
             var nodeok = 0;
             //foreach (var item in parent.Nodes)
@@ -486,5 +645,23 @@ namespace FinatechControle
             }
         }
 
+        private void radTreeView2_NodeMouseDoubleClick(object sender, RadTreeViewEventArgs e)
+        {
+            if (e.Node.Level == 0)
+            {
+                MessageBox.Show(e.Node.Value.ToString());
+                //var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
+                //using (SqlConnection cnn = new SqlConnection(constr))
+                //{
+                //    cnn.Open();
+
+                //    var Docs = getDocs(e.Node.Value.ToString());
+                //    foreach (DataRow item in Docs.Rows)
+                //    {
+                //        e.Node
+                //    }
+                //}
+            }
+        }
     }
 }
