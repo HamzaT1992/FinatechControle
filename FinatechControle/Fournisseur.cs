@@ -115,10 +115,12 @@ namespace FinatechControle
             if (tb.Text == "")
             {
                 errorProvider1.SetError(tb, "Veillez remplir le champs");
+                errorProvider2.Clear();
             }
             else
             {
                 errorProvider2.SetError(tb, "Correcte");
+                errorProvider1.Clear();
             }
         }
     }

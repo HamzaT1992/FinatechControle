@@ -49,12 +49,17 @@
             this.radLabel2 = new Telerik.WinControls.UI.RadLabel();
             this.radLabel1 = new Telerik.WinControls.UI.RadLabel();
             this.radPanel4 = new Telerik.WinControls.UI.RadPanel();
-            this.radContextMenu1 = new Telerik.WinControls.UI.RadContextMenu(this.components);
+            this.docContextMenu = new Telerik.WinControls.UI.RadContextMenu(this.components);
             this.openxml = new Telerik.WinControls.UI.RadMenuItem();
             this.rescan = new Telerik.WinControls.UI.RadMenuItem();
             this.nodeCopyName = new Telerik.WinControls.UI.RadMenuItem();
-            this.radContextMenuManager1 = new Telerik.WinControls.UI.RadContextMenuManager();
             this.delete = new Telerik.WinControls.UI.RadMenuItem();
+            this.radContextMenuManager1 = new Telerik.WinControls.UI.RadContextMenuManager();
+            this.boiteContextMenu = new Telerik.WinControls.UI.RadContextMenu(this.components);
+            this.openBoite = new Telerik.WinControls.UI.RadMenuItem();
+            this.toInstance = new Telerik.WinControls.UI.RadMenuItem();
+            this.closeBoite = new Telerik.WinControls.UI.RadMenuItem();
+            this.searchInBoite = new Telerik.WinControls.UI.RadMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.radTreeView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPdfViewerNavigator1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPdfViewer2)).BeginInit();
@@ -98,6 +103,7 @@
             this.radTreeView2.SpacingBetweenNodes = -1;
             this.radTreeView2.TabIndex = 0;
             this.radTreeView2.ThemeName = "ControlDefault";
+            this.radTreeView2.NodeMouseDoubleClick += new Telerik.WinControls.UI.RadTreeView.TreeViewEventHandler(this.radTreeView2_NodeMouseDoubleClick);
             // 
             // radPdfViewerNavigator1
             // 
@@ -299,14 +305,14 @@
             this.radPanel4.TabIndex = 0;
             this.radPanel4.Text = "radPanel4";
             // 
-            // radContextMenu1
+            // docContextMenu
             // 
-            this.radContextMenu1.Items.AddRange(new Telerik.WinControls.RadItem[] {
+            this.docContextMenu.Items.AddRange(new Telerik.WinControls.RadItem[] {
             this.openxml,
             this.rescan,
             this.nodeCopyName,
             this.delete});
-            this.radContextMenu1.ThemeName = "ControlDefault";
+            this.docContextMenu.ThemeName = "ControlDefault";
             // 
             // openxml
             // 
@@ -330,6 +336,34 @@
             // 
             this.delete.Name = "delete";
             this.delete.Text = "Supprimer";
+            // 
+            // boiteContextMenu
+            // 
+            this.boiteContextMenu.Items.AddRange(new Telerik.WinControls.RadItem[] {
+            this.openBoite,
+            this.toInstance,
+            this.closeBoite,
+            this.searchInBoite});
+            // 
+            // openBoite
+            // 
+            this.openBoite.Name = "openBoite";
+            this.openBoite.Text = "Ouvrir";
+            // 
+            // toInstance
+            // 
+            this.toInstance.Name = "toInstance";
+            this.toInstance.Text = "Mettre en instance";
+            // 
+            // closeBoite
+            // 
+            this.closeBoite.Name = "closeBoite";
+            this.closeBoite.Text = "Cloturer la boite";
+            // 
+            // searchInBoite
+            // 
+            this.searchInBoite.Name = "searchInBoite";
+            this.searchInBoite.Text = "Rechercher";
             // 
             // Controle
             // 
@@ -408,12 +442,17 @@
         public Telerik.WinControls.UI.RadLabel radLabel2;
         private Telerik.WinControls.UI.RadLabel TxLabel;
         private Telerik.WinControls.UI.RadLabel TxTitleLabel;
-        private Telerik.WinControls.UI.RadContextMenu radContextMenu1;
+        private Telerik.WinControls.UI.RadContextMenu docContextMenu;
         private Telerik.WinControls.UI.RadMenuItem openxml;
         private Telerik.WinControls.UI.RadMenuItem rescan;
         private Telerik.WinControls.UI.RadContextMenuManager radContextMenuManager1;
         private Telerik.WinControls.UI.RadMenuItem nodeCopyName;
         private Telerik.WinControls.UI.RadLabel lb_prod;
         private Telerik.WinControls.UI.RadMenuItem delete;
+        private Telerik.WinControls.UI.RadContextMenu boiteContextMenu;
+        private Telerik.WinControls.UI.RadMenuItem openBoite;
+        private Telerik.WinControls.UI.RadMenuItem toInstance;
+        private Telerik.WinControls.UI.RadMenuItem closeBoite;
+        private Telerik.WinControls.UI.RadMenuItem searchInBoite;
     }
 }
