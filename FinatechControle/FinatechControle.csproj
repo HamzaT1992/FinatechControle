@@ -163,6 +163,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Administration_ANCFCCDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Administration_ANCFCCDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="AffecterBoites.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AffecterBoites.Designer.cs">
+      <DependentUpon>AffecterBoites.cs</DependentUpon>
+    </Compile>
     <Compile Include="Banque.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -212,6 +223,9 @@
     <Compile Include="Rechercher.Designer.cs">
       <DependentUpon>Rechercher.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AffecterBoites.resx">
+      <DependentUpon>AffecterBoites.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Banque.resx">
       <DependentUpon>Banque.cs</DependentUpon>
     </EmbeddedResource>
@@ -245,6 +259,17 @@
     <EmbeddedResource Include="Rechercher.resx">
       <DependentUpon>Rechercher.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="Administration_ANCFCCDataSet.xsc">
+      <DependentUpon>Administration_ANCFCCDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Administration_ANCFCCDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Administration_ANCFCCDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Administration_ANCFCCDataSet.xss">
+      <DependentUpon>Administration_ANCFCCDataSet.xsd</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

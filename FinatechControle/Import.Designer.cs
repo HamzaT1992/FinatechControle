@@ -95,6 +95,7 @@
             // 
             this.validChanges.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.validChanges.Enabled = false;
             this.validChanges.Location = new System.Drawing.Point(33, 662);
             this.validChanges.Name = "validChanges";
             this.validChanges.Size = new System.Drawing.Size(215, 24);

@@ -50,30 +50,39 @@ namespace FinatechControle
 
         private void RadForm1_Load(object sender, EventArgs e)
         {
+            //Menu Application
+            rechercheBoite.Click += SearchInBoite_Click;
             // menu Boites
             openBoite.Click += OpenBoite_Click;
-            toInstance.Click += ToInstance_Click;
+            //toInstance.Click += ToInstance_Click;
             closeBoite.Click += CloseBoite_Click;
-            searchInBoite.Click += SearchInBoite_Click;
+            //searchInBoite.Click += SearchInBoite_Click;
             toInstance.Enabled = closeBoite.Enabled = false;
             // menu Documents
             openxml.Click += Openxml_Click;
             rescan.Click += Rescan_Click;
             nodeCopyName.Click += NodeCopyName_Click;
-            delete.Click += Delete_Click;
+            //delete.Click += Delete_Click;
             // Chareger les boites et les dossiers
+            LoadBoites();
+            var c = radTreeView2.Nodes.Count;
+            // Calcule du total prod
+            CalculeProdControl();
+        }
+
+        public void LoadBoites()
+        {
             var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
             using (SqlConnection cnn = new SqlConnection(constr))
             {
                 cnn.Open();
                 string affect = operation == "Indexations" ? $"AND user_affect = {id_user_control}" : "";
 
-                string rqtNumBoites = $"SELECT DISTINCT NumBoite FROM boite WHERE id_status {status} {affect} ORDER BY NumBoite";
+                string rqtNumBoites = $"SELECT DISTINCT NumBoite,rtrim(login) userAffect FROM boite b join Administration_ANCFCC.dbo.TB_Utilisateurs u on b.user_affect=u.id_user --WHERE id_status {status} {affect} ORDER BY NumBoite";
 
                 SqlDataAdapter da = new SqlDataAdapter(rqtNumBoites, cnn);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
-                radTreeView2.BeginUpdate();
                 try
                 {
                     // TreeNode adds changes here
@@ -82,14 +91,16 @@ namespace FinatechControle
 
                         RadTreeNode boite = new RadTreeNode();
                         boite.ContextMenu = boiteContextMenu;
+                        var userAffect = row["userAffect"].ToString();
                         var numBoite = row["Numboite"].ToString();
 
                         boite.Value = numBoite;
                         var Docs = getDocs(numBoite);
-                        
+
 
                         //Boites.Nodes.Add(boite);
-                        boite.Text = $"Boite {numBoite} ({Docs.Rows.Count})";
+                        boite.Text = $"Boite {numBoite} [{userAffect}] ({Docs.Rows.Count})";
+                        boite.Tag = Docs.Rows.Count;
                         Bitmap img = Resources.boite2;
                         var bStatus = GetBoiteStatus(Docs);
                         if (bStatus == 4)
@@ -108,13 +119,6 @@ namespace FinatechControle
                 {
                     MessageBox.Show(ex.Message);
                 }
-                finally
-                {
-                    radTreeView2.EndUpdate();
-                }
-
-                // Calcule du total prod
-                CalculeProdControl();
             }
         }
 
@@ -125,73 +129,76 @@ namespace FinatechControle
 
         private void CloseBoite_Click(object sender, EventArgs e)
         {
-            if (CurrentBoite != radTreeView2.SelectedNode)
-            {
-                MessageBox.Show($"Veuillez cloturer la boite {CurrentBoite.Value.ToString()}");
-            }
-            else
-            {
-                DialogResult result = MessageBox.Show($"Vous êtes sur de cloturer la boite","Verrification",MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (result == DialogResult.Yes)
-                {
-                    var conStr = ConfigurationManager.ConnectionStrings["StrCon"].ToString();
-                    using (var con = new SqlConnection(conStr))
-                    {
-                        con.Open();
+            CurrentBoite.Nodes.Clear();
+            openBoite.Enabled = true;
+            closeBoite.Enabled = boiteOpen = false;
+            //if (CurrentBoite != radTreeView2.SelectedNode)
+            //{
+            //    MessageBox.Show($"Veuillez cloturer la boite {CurrentBoite.Value.ToString()}");
+            //}
+            //else
+            //{
+            //    DialogResult result = MessageBox.Show($"Vous êtes sur de cloturer la boite","Verrification",MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            //    if (result == DialogResult.Yes)
+            //    {
+            //        var conStr = ConfigurationManager.ConnectionStrings["StrCon"].ToString();
+            //        using (var con = new SqlConnection(conStr))
+            //        {
+            //            con.Open();
 
-                        var docs = getDocs(CurrentBoite.Value.ToString());
-                        var bStatus = GetBoiteStatus(docs);
-                        if (bStatus == 4)
-                        {
-                            MessageBox.Show($"Merci de valider tous les document avant de cloturer la boite", "Verrification", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                            return;
-                        }
-                        else
-                        {
-                            var req = $"update boite set id_status = 6 where numboite = {CurrentBoite.Value}";
-                            new SqlCommand(req, con).ExecuteNonQuery();
-                            CurrentBoite.Remove();
-                            openBoite.Enabled = true;
-                            toInstance.Enabled = closeBoite.Enabled = boiteOpen = false;
-                        }
-                    }
-                }
-            }
+            //            var docs = getDocs(CurrentBoite.Value.ToString());
+            //            var bStatus = GetBoiteStatus(docs);
+            //            if (bStatus == 4)
+            //            {
+            //                MessageBox.Show($"Merci de valider tous les document avant de cloturer la boite", "Verrification", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            //                return;
+            //            }
+            //            else
+            //            {
+            //                var req = $"update boite set id_status = 6 where numboite = {CurrentBoite.Value}";
+            //                new SqlCommand(req, con).ExecuteNonQuery();
+            //                CurrentBoite.Remove();
+            //                openBoite.Enabled = true;
+            //                toInstance.Enabled = closeBoite.Enabled = boiteOpen = false;
+            //            }
+            //        }
+            //    }
+               //}
         }
 
-        private void ToInstance_Click(object sender, EventArgs e)
-        {
-            if (CurrentBoite != radTreeView2.SelectedNode)
-            {
-                MessageBox.Show($"Veuillez cloturer la boite {CurrentBoite.Value.ToString()}");
-            }
-            else
-            {
-                CurrentBoite.Nodes.Clear();
-                var conStr = ConfigurationManager.ConnectionStrings["StrCon"].ToString();
-                using (var con = new SqlConnection(conStr))
-                {
-                    con.Open();
+        //private void ToInstance_Click(object sender, EventArgs e)
+        //{
+        //    if (CurrentBoite != radTreeView2.SelectedNode)
+        //    {
+        //        MessageBox.Show($"Veuillez cloturer la boite {CurrentBoite.Value.ToString()}");
+        //    }
+        //    else
+        //    {
+        //        CurrentBoite.Nodes.Clear();
+        //        var conStr = ConfigurationManager.ConnectionStrings["StrCon"].ToString();
+        //        using (var con = new SqlConnection(conStr))
+        //        {
+        //            con.Open();
 
-                    var docs = getDocs(CurrentBoite.Value.ToString());
-                    var bStatus = GetBoiteStatus(docs);
+        //            var docs = getDocs(CurrentBoite.Value.ToString());
+        //            var bStatus = GetBoiteStatus(docs);
 
-                    var req = $"update boite set id_status = 4 where numboite = {CurrentBoite.Value}";
-                    new SqlCommand(req, con).ExecuteNonQuery();
-                    openBoite.Enabled = true;
-                    toInstance.Enabled = closeBoite.Enabled = boiteOpen = false;
-                }
-            }
-        }
+        //            var req = $"update boite set id_status = 4 where numboite = {CurrentBoite.Value}";
+        //            new SqlCommand(req, con).ExecuteNonQuery();
+        //            openBoite.Enabled = true;
+        //            toInstance.Enabled = closeBoite.Enabled = boiteOpen = false;
+        //        }
+        //    }
+        //}
 
         private void OpenBoite_Click(object sender, EventArgs e)
         {
-
+            
             if (radTreeView2.SelectedNode.Level == 0)
             {
                 CurrentBoite = radTreeView2.SelectedNode;
                 openBoite.Enabled = false;
-                toInstance.Enabled = closeBoite.Enabled = boiteOpen = true;
+                closeBoite.Enabled = boiteOpen = true;
 
                 var Docs = getDocs(CurrentBoite.Value.ToString());
 
@@ -291,23 +298,23 @@ namespace FinatechControle
             MessageBox.Show(SourcePath);
         }
 
-        private void Delete_Click(object sender, EventArgs e)
-        {
-            var data = (NodeData)CurrentDoc.Tag;
-            data.status = 18;
-            CurrentDoc.Image = Resources.folder_error;
-            var table = GetDocTable();
+        //private void Delete_Click(object sender, EventArgs e)
+        //{
+        //    var data = (NodeData)CurrentDoc.Tag;
+        //    data.status = 18;
+        //    CurrentDoc.Image = Resources.folder_error;
+        //    var table = GetDocTable();
 
-            var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
-            using (SqlConnection cnn = new SqlConnection(constr))
-            {
-                cnn.Open();
-                //var boite = numboite == "" ? "Numboite is null" : "Numboite = '" + numboite + "'";
-                //string reqdocs = "select * from DossiersIndexeV where id_status in (3,6) and " + boite;
-                string reqdocs = $"update {table} set id_status = 18 where NomDossier='{data.NomDoc.Replace("'","''")}'";
-                new SqlCommand(reqdocs, cnn).ExecuteNonQuery();
-            }
-        }
+        //    var constr = ConfigurationManager.ConnectionStrings["StrCon"].ConnectionString;
+        //    using (SqlConnection cnn = new SqlConnection(constr))
+        //    {
+        //        cnn.Open();
+        //        //var boite = numboite == "" ? "Numboite is null" : "Numboite = '" + numboite + "'";
+        //        //string reqdocs = "select * from DossiersIndexeV where id_status in (3,6) and " + boite;
+        //        string reqdocs = $"update {table} set id_status = 18 where NomDossier='{data.NomDoc.Replace("'","''")}'";
+        //        new SqlCommand(reqdocs, cnn).ExecuteNonQuery();
+        //    }
+        //}
         // Obtenir tous les documents d'une boite
         private DataTable getDocs(string numboite)
         {
@@ -379,6 +386,10 @@ namespace FinatechControle
         // sélectionner un dossier
         private void Node_Changed(object sender, RadTreeViewEventArgs e)
         {
+            if (e.Node == null)
+            {
+                return;
+            }
             if (e.Node.Level == 1)
             {
                 try
@@ -661,6 +672,19 @@ namespace FinatechControle
                 //        e.Node
                 //    }
                 //}
+            }
+        }
+
+        private void affectBoite_Click(object sender, EventArgs e)
+        {
+            new AffecterBoites(this).ShowDialog();
+        }
+
+        private void radTreeView2_SelectedNodesChanged(object sender, RadTreeViewEventArgs e)
+        {
+            if (radTreeView2.SelectedNode.Level == 0)
+            {
+                lb_boitesSelected.Text = $"{radTreeView2.SelectedNodes.Count} Boite(s) Sélectionnées";
             }
         }
     }
