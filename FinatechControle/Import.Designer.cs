@@ -308,7 +308,7 @@
             this.LB_nBoite.Name = "LB_nBoite";
             this.LB_nBoite.Size = new System.Drawing.Size(215, 18);
             this.LB_nBoite.TabIndex = 58;
-            this.LB_nBoite.Text = "Num Engagement Import";
+            this.LB_nBoite.Text = "Num Boite";
             // 
             // TB_numBoite
             // 
