@@ -38,7 +38,7 @@ namespace FinatechControle
             {
                 return;
             }
-            var req = $"select NomDossier from {table} where numboite={numBoite} and {champs}=@rechVal";
+            var req = $"select NomDossier from {table} where numboite={numBoite} and {champs}=@rechVal and id_status<>18";
             var conStr = ConfigurationManager.ConnectionStrings["StrCon"].ToString();
             using (var con = new SqlConnection(conStr))
             {
